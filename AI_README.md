@@ -51,6 +51,9 @@
 - Base modular folder structure created to enforce small, focused files
 - Environment variable template planned via `.env.example`
 - Phase 2 database schema drafted with profiles, workspace sections, documents, RLS policies, and default section seeding
+- Phase 3 authentication flow added with email/password, Google, GitHub, and Supabase callback handling
+- Protected workspace layout added with a collapsible, section-aware sidebar shell
+- Root route now redirects signed-in users to `/app` and guests to `/login`
 
 ## Architecture Notes
 - We are using App Router and keeping route files thin by moving reusable logic into `components`, `lib`, `hooks`, and `actions`
@@ -58,8 +61,11 @@
 - File size discipline remains active: keep files under roughly 200-250 lines
 - Product direction now supports both generic Notion pages and domain-specific sections like finance, calendar, tasks, habits, missions, and reading
 - `documents.properties_schema` and `documents.properties_data` let us mimic lightweight Notion databases without creating many separate tables too early
+- Auth is handled with Supabase SSR helpers, proxy-based session refresh, server actions for login/signup/logout, and an OAuth callback route
+- The workspace shell is split into reusable sidebar/auth components to keep layouts thin
 
 ## Next Steps
 - Apply the SQL migrations in Supabase
-- Phase 3: build authentication flows and the main app layout with a collapsible sidebar
-- Start the sidebar around section-aware navigation so each workspace area can have its own top-level entry
+- Set the Vercel environment variables: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, and `NEXT_PUBLIC_SITE_URL`
+- Phase 4: fetch nested documents and render the real tree inside the sidebar
+- Add server actions for creating, renaming, archiving, and restoring documents
