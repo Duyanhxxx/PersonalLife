@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { signInWithPassword } from "@/actions/auth";
 import { OauthButtons } from "@/components/auth/oauth-buttons";
+import { PasswordInput } from "@/components/auth/password-input";
 import { Button } from "@/components/ui/button";
 
 type LoginFormProps = {
@@ -35,16 +36,12 @@ export function LoginForm({ returnTo = "/app" }: LoginFormProps) {
             type="email"
           />
         </label>
-        <label className="grid gap-2">
-          <span className="text-sm font-medium">Password</span>
-          <input
-            className="h-11 rounded-xl border border-border bg-background px-3 text-sm outline-none ring-0 transition focus:border-foreground"
-            name="password"
-            placeholder="Your password"
-            required
-            type="password"
-          />
-        </label>
+        <PasswordInput
+          label="Password"
+          name="password"
+          placeholder="Your password"
+          required
+        />
         <Button className="w-full" type="submit">
           Sign in
         </Button>
