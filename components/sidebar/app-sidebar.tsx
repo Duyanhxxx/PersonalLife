@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { ChevronRight, Search, Sparkles } from "lucide-react";
+import { ChevronRight, Search, Sparkles, Settings } from "lucide-react";
 import { signOut } from "@/actions/auth";
 import { Button } from "@/components/ui/button";
 import { CreateDocumentButton } from "@/components/sidebar/create-document-button";
@@ -74,6 +74,17 @@ export function AppSidebar({
               {activeSection ? (
                 <DocumentTree nodes={activeDocuments} sectionSlug={activeSection} />
               ) : null}
+            </div>
+            </div>
+
+            <div className="px-3 pt-4 border-t border-[#8EE4AF]/20">
+              <Link
+                className="flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm text-[#20555F] transition hover:bg-white/70 hover:text-[#05386B]"
+                href="/app/settings"
+              >
+                <Settings className="size-4" />
+                <span>Settings & Studio</span>
+              </Link>
             </div>
           </div>
         ) : (

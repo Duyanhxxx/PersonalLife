@@ -141,32 +141,9 @@ export default async function WorkspacePage({ searchParams }: WorkspacePageProps
               sectionSlug={sectionSlug}
               surface={theme.surface}
             />
-            {activeSection ? <SectionManager activeSection={activeSection} /> : null}
           </div>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-3">
-          {sections.map((section) => (
-            <article
-              className={`rounded-[1.75rem] border p-5 transition ${
-                section.slug === activeSection?.slug
-                  ? "border-[#05386B] bg-[#05386B] text-[#EDF5E1] shadow-[0_18px_60px_rgba(5,56,107,0.18)]"
-                  : "border-[#8EE4AF]/45 bg-white/70"
-              }`}
-              key={section.id}
-            >
-              <h3 className="text-lg font-semibold">{section.name}</h3>
-              <p
-                className={`mt-2 text-sm leading-6 ${
-                  section.slug === activeSection?.slug
-                    ? "text-[#CDEED9]"
-                    : "text-[#20555F]"
-                }`}
-              >
-                {(sectionThemes[section.slug as SystemSectionSlug] ?? sectionThemes.notes).description}
-              </p>
-            </article>
-          ))}
         </div>
       </div>
     </section>

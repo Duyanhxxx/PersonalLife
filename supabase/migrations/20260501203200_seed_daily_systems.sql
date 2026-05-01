@@ -3,17 +3,17 @@ select
   p.id,
   event.title,
   event.entry_date,
-  event.start_time,
-  event.end_time,
+  event.start_time::time,
+  event.end_time::time,
   event.tone,
   event.notes
 from public.profiles p
 cross join (
   values
-    ('Gym nặng', current_date, '06:00', '07:15', 'green', 'Push / pull / leg'),
-    ('Deep Work 1A', current_date, '08:30', '10:00', 'blue', 'Feature build or bug fixing'),
-    ('Deep Work 1B', current_date, '10:15', '11:30', 'blue', 'Continue dev core'),
-    ('Strategic Work', current_date, '19:30', '21:00', 'amber', 'Tech docs, note writing, tutorial')
+    ('Gym nặng', (now() at time zone 'Asia/Ho_Chi_Minh')::date, '06:00', '07:15', 'green', 'Push / pull / leg'),
+    ('Deep Work 1A', (now() at time zone 'Asia/Ho_Chi_Minh')::date, '08:30', '10:00', 'blue', 'Feature build or bug fixing'),
+    ('Deep Work 1B', (now() at time zone 'Asia/Ho_Chi_Minh')::date, '10:15', '11:30', 'blue', 'Continue dev core'),
+    ('Strategic Work', (now() at time zone 'Asia/Ho_Chi_Minh')::date, '19:30', '21:00', 'amber', 'Tech docs, note writing, tutorial')
 ) as event(title, entry_date, start_time, end_time, tone, notes)
 where not exists (
   select 1
@@ -26,7 +26,7 @@ where not exists (
 insert into public.todo_items (user_id, entry_date, title, priority, color)
 select
   p.id,
-  current_date,
+  (now() at time zone 'Asia/Ho_Chi_Minh')::date,
   item.title,
   item.priority::public.todo_priority,
   item.color
@@ -41,7 +41,7 @@ where not exists (
   select 1
   from public.todo_items existing
   where existing.user_id = p.id
-    and existing.entry_date = current_date
+    and existing.entry_date = (now() at time zone 'Asia/Ho_Chi_Minh')::date
     and existing.title = item.title
 );
 

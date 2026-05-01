@@ -52,7 +52,7 @@ export function TodoSection({ items }: TodoSectionProps) {
                 <div className="rounded-2xl bg-[#F7FBF4] p-4" key={item.id}>
                   <div className="flex items-start justify-between gap-3">
                     <div>
-                      <span className={`rounded-full px-2.5 py-1 text-xs font-medium ${colorMap[item.color] ?? colorMap.blue}`}>{item.priority}</span>
+                      <span className={`inline-block rounded-full px-2.5 py-1 text-xs font-medium ${colorMap[item.color] ?? colorMap.blue}`}>{item.priority}</span>
                       <p className="mt-2 font-medium text-[#05386B]">{item.title}</p>
                     </div>
                     <div className="flex gap-2">
