@@ -54,6 +54,9 @@
 - Phase 3 authentication flow added with email/password, Google, GitHub, and Supabase callback handling
 - Protected workspace layout added with a collapsible, section-aware sidebar shell
 - Root route now redirects signed-in users to `/app` and guests to `/login`
+- Phase 4 document data layer added with section-aware Supabase fetch helpers and recursive tree shaping
+- Sidebar now renders real nested documents, supports creating root and child pages, and links active documents into the workspace view
+- Archive and restore document flows added, alongside a smoother workspace surface and the new green-blue palette inspired by the provided reference
 
 ## Architecture Notes
 - We are using App Router and keeping route files thin by moving reusable logic into `components`, `lib`, `hooks`, and `actions`
@@ -63,9 +66,11 @@
 - `documents.properties_schema` and `documents.properties_data` let us mimic lightweight Notion databases without creating many separate tables too early
 - Auth is handled with Supabase SSR helpers, proxy-based session refresh, server actions for login/signup/logout, and an OAuth callback route
 - The workspace shell is split into reusable sidebar/auth components to keep layouts thin
+- Document tree shaping happens in `lib/workspace/documents.ts`, while `actions/documents.ts` owns create, rename, archive, and restore mutations
+- Workspace visuals now use a palette centered on `#05386B`, `#379683`, `#5CDB95`, `#8EE4AF`, and `#EDF5E1`
 
 ## Next Steps
 - Apply the SQL migrations in Supabase
 - Set the Vercel environment variables: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, and `NEXT_PUBLIC_SITE_URL`
-- Phase 4: fetch nested documents and render the real tree inside the sidebar
-- Add server actions for creating, renaming, archiving, and restoring documents
+- Phase 5: integrate the rich text editor into the active document view
+- Add realtime and optimistic updates so the sidebar tree reacts instantly to mutations

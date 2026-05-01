@@ -1,0 +1,114 @@
+"use server";
+
+import { createClient } from "@/lib/supabase/server";
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
+
+function getValue(formData: FormData, key: string) {
+  const value = formData.get(key);
+  return typeof value === "string" ? value : "";
+}
+
+async function resolveSectionId(userId: string, slug: string) {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("workspace_sections")
+    .select("id")
+    .eq("user_id", userId)
+    .eq("slug", slug)
+    .single();
+
+  return data?.id ?? null;
+}
+
+export async function createDocument(formData: FormData) {
+  const sectionSlug = getValue(formData, "sectionSlug");
+  const title = getValue(formData, "title") || "Untitled";
+  const kind = getValue(formData, "kind") || "page";
+  const parentId = getValue(formData, "parentId") || null;
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    redirect("/login");
+  }
+
+  const sectionId = await resolveSectionId(user.id, sectionSlug);
+  let siblingsQuery = supabase
+    .from("documents")
+    .select("position")
+    .eq("user_id", user.id)
+    .eq("section_id", sectionId)
+    .order("position", { ascending: false })
+    .limit(1);
+
+  siblingsQuery = parentId
+    ? siblingsQuery.eq("parent_id", parentId)
+    : siblingsQuery.is("parent_id", null);
+
+  const { data: siblings } = await siblingsQuery;
+
+  const position = (siblings?.[0]?.position ?? -1) + 1;
+
+  const { data } = await supabase
+    .from("documents")
+    .insert({
+      user_id: user.id,
+      section_id: sectionId,
+      parent_id: parentId,
+      title,
+      kind,
+      position,
+      last_edited_by: user.id,
+    })
+    .select("id")
+    .single();
+
+  revalidatePath("/app");
+  redirect(`/app?section=${sectionSlug}&document=${data?.id ?? ""}`);
+}
+
+export async function renameDocument(formData: FormData) {
+  const id = getValue(formData, "id");
+  const title = getValue(formData, "title") || "Untitled";
+  const supabase = await createClient();
+
+  await supabase.from("documents").update({ title }).eq("id", id);
+  revalidatePath("/app");
+}
+
+export async function archiveDocument(formData: FormData) {
+  const id = getValue(formData, "id");
+  const sectionSlug = getValue(formData, "sectionSlug") || "notes";
+  const supabase = await createClient();
+
+  await supabase
+    .from("documents")
+    .update({
+      is_archived: true,
+      archived_at: new Date().toISOString(),
+    })
+    .eq("id", id);
+
+  revalidatePath("/app");
+  redirect(`/app?section=${sectionSlug}`);
+}
+
+export async function restoreDocument(formData: FormData) {
+  const id = getValue(formData, "id");
+  const sectionSlug = getValue(formData, "sectionSlug") || "notes";
+  const supabase = await createClient();
+
+  await supabase
+    .from("documents")
+    .update({
+      is_archived: false,
+      archived_at: null,
+    })
+    .eq("id", id);
+
+  revalidatePath("/app");
+  redirect(`/app?section=${sectionSlug}&document=${id}`);
+}
