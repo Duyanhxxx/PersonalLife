@@ -6,6 +6,8 @@ export type WorkspaceSection = {
   name: string;
   slug: string;
   icon: string | null;
+  color?: string | null;
+  is_system: boolean;
 };
 
 const fallbackLabels: Record<SystemSectionSlug, string> = {
@@ -22,7 +24,7 @@ export async function getWorkspaceSections(userId: string) {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("workspace_sections")
-    .select("id, name, slug, icon")
+    .select("id, name, slug, icon, color, is_system")
     .eq("user_id", userId)
     .order("sort_order", { ascending: true });
 
@@ -35,5 +37,7 @@ export async function getWorkspaceSections(userId: string) {
     name: fallbackLabels[slug],
     slug,
     icon: null,
+    color: null,
+    is_system: true,
   }));
 }

@@ -1,4 +1,5 @@
 import { DocumentPanel } from "@/components/workspace/document-panel";
+import { SectionManager } from "@/components/workspace/section-manager";
 import { SectionHeader } from "@/components/workspace/section-header";
 import { requireUser } from "@/lib/auth/session";
 import { getSectionDocuments } from "@/lib/workspace/documents";
@@ -41,46 +42,50 @@ export default async function WorkspacePage({
         <div className="grid gap-4 lg:grid-cols-[1.7fr_1fr]">
           <DocumentPanel document={activeDocument} sectionSlug={sectionSlug} />
 
-          <aside className={`rounded-[2rem] border border-[#8EE4AF]/50 ${theme.surface} p-6 shadow-sm`}>
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#379683]">
-              Archive
-            </p>
-            <h3 className="mt-3 text-2xl font-semibold text-[#05386B]">
-              Keep the section tidy without losing history.
-            </h3>
-            <div className="mt-5 space-y-3">
-              {archived.length ? (
-                archived.map((document) => (
-                  <form
-                    action={restoreDocument}
-                    className="rounded-3xl border border-white/70 bg-white/75 p-4"
-                    key={document.id}
-                  >
-                    <input name="id" type="hidden" value={document.id} />
-                    <input name="sectionSlug" type="hidden" value={sectionSlug} />
-                    <div className="flex items-start justify-between gap-3">
-                      <div>
-                        <p className="font-medium text-[#05386B]">{document.title}</p>
-                        <p className="mt-1 text-xs text-[#379683] capitalize">
-                          {document.kind}
-                        </p>
+          <div className="space-y-4">
+            <aside className={`rounded-[2rem] border border-[#8EE4AF]/50 ${theme.surface} p-6 shadow-sm`}>
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#379683]">
+                Archive
+              </p>
+              <h3 className="mt-3 text-2xl font-semibold text-[#05386B]">
+                Keep the section tidy without losing history.
+              </h3>
+              <div className="mt-5 space-y-3">
+                {archived.length ? (
+                  archived.map((document) => (
+                    <form
+                      action={restoreDocument}
+                      className="rounded-3xl border border-white/70 bg-white/75 p-4"
+                      key={document.id}
+                    >
+                      <input name="id" type="hidden" value={document.id} />
+                      <input name="sectionSlug" type="hidden" value={sectionSlug} />
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <p className="font-medium text-[#05386B]">{document.title}</p>
+                          <p className="mt-1 text-xs text-[#379683] capitalize">
+                            {document.kind}
+                          </p>
+                        </div>
+                        <button
+                          className="rounded-2xl bg-[#05386B] px-3 py-2 text-xs font-medium text-[#EDF5E1] transition hover:bg-[#0A4A86]"
+                          type="submit"
+                        >
+                          Restore
+                        </button>
                       </div>
-                      <button
-                        className="rounded-2xl bg-[#05386B] px-3 py-2 text-xs font-medium text-[#EDF5E1] transition hover:bg-[#0A4A86]"
-                        type="submit"
-                      >
-                        Restore
-                      </button>
-                    </div>
-                  </form>
-                ))
-              ) : (
-                <p className="rounded-3xl border border-dashed border-[#379683]/30 bg-white/60 p-4 text-sm leading-6 text-[#20555F]">
-                  Nothing is in the trash for this section yet. Archived pages will show up here for one-click restore.
-                </p>
-              )}
-            </div>
-          </aside>
+                    </form>
+                  ))
+                ) : (
+                  <p className="rounded-3xl border border-dashed border-[#379683]/30 bg-white/60 p-4 text-sm leading-6 text-[#20555F]">
+                    Nothing is in the trash for this section yet. Archived pages will show up here for one-click restore.
+                  </p>
+                )}
+              </div>
+            </aside>
+
+            {activeSection ? <SectionManager activeSection={activeSection} /> : null}
+          </div>
         </div>
 
         <div className="grid gap-4 md:grid-cols-3">

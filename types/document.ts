@@ -1,3 +1,11 @@
+export type MetadataValue =
+  | string
+  | number
+  | boolean
+  | null
+  | MetadataValue[]
+  | { [key: string]: MetadataValue };
+
 export type DocumentKind = "page" | "database" | "view" | "template";
 
 export type DocumentRow = {
@@ -8,6 +16,7 @@ export type DocumentRow = {
   title: string;
   icon: string | null;
   kind: DocumentKind;
+  metadata: Record<string, MetadataValue> | null;
   position: number;
   is_archived: boolean;
   updated_at: string;

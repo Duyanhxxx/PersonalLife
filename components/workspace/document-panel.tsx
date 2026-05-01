@@ -1,4 +1,5 @@
 import { archiveDocument, renameDocument } from "@/actions/documents";
+import { TemplatePreview } from "@/components/workspace/template-preview";
 import type { DocumentRow } from "@/types/document";
 
 type DocumentPanelProps = {
@@ -83,6 +84,8 @@ export function DocumentPanel({ document, sectionSlug }: DocumentPanelProps) {
           </dl>
         </div>
       </div>
+
+      <TemplatePreview metadata={document.metadata} />
     </section>
   );
 }

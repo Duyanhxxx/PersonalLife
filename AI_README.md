@@ -57,6 +57,9 @@
 - Phase 4 document data layer added with section-aware Supabase fetch helpers and recursive tree shaping
 - Sidebar now renders real nested documents, supports creating root and child pages, and links active documents into the workspace view
 - Archive and restore document flows added, alongside a smoother workspace surface and the new green-blue palette inspired by the provided reference
+- Starter workspace templates now seed into sections for schedule, task bank, workout system, finance, missions, and reading
+- Section CRUD added for custom sections, with protected system sections and safe document fallback on delete
+- Workspace detail panel now understands template-style metadata and renders richer previews for schedules, tasks, and workouts
 
 ## Architecture Notes
 - We are using App Router and keeping route files thin by moving reusable logic into `components`, `lib`, `hooks`, and `actions`
@@ -67,7 +70,9 @@
 - Auth is handled with Supabase SSR helpers, proxy-based session refresh, server actions for login/signup/logout, and an OAuth callback route
 - The workspace shell is split into reusable sidebar/auth components to keep layouts thin
 - Document tree shaping happens in `lib/workspace/documents.ts`, while `actions/documents.ts` owns create, rename, archive, and restore mutations
+- `actions/sections.ts` owns custom section create, rename, and delete flows
 - Workspace visuals now use a palette centered on `#05386B`, `#379683`, `#5CDB95`, `#8EE4AF`, and `#EDF5E1`
+- Seeded section templates are stored in `documents.metadata`, which lets us render structured previews before the rich editor lands
 
 ## Next Steps
 - Apply the SQL migrations in Supabase
