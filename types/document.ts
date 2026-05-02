@@ -17,6 +17,7 @@ export type DocumentRow = {
   icon: string | null;
   kind: DocumentKind;
   metadata: Record<string, MetadataValue> | null;
+  content: any | null;
   position: number;
   is_archived: boolean;
   updated_at: string;

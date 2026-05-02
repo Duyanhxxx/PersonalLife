@@ -79,7 +79,7 @@ export async function getSectionDocuments(userId: string, sectionId: string) {
   const { data, error } = await supabase
     .from("documents")
     .select(
-      "id, user_id, section_id, parent_id, title, icon, kind, metadata, position, is_archived, updated_at, created_at",
+      "id, user_id, section_id, parent_id, title, icon, kind, metadata, content, position, is_archived, updated_at, created_at",
     )
     .eq("user_id", userId)
     .eq("section_id", sectionId)
