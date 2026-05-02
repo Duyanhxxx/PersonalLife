@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { BookOpen, CalendarDays, CircleDollarSign, FileText, ListTodo, Target, Waves, LayoutDashboard } from "lucide-react";
 import type { WorkspaceSection } from "@/lib/workspace/sections";
+import { useI18n } from "@/lib/i18n/i18n-context";
 
 type SectionNavProps = {
   sections: WorkspaceSection[];
@@ -21,6 +22,7 @@ const iconMap: Record<string, React.ElementType> = {
 };
 
 export function SectionNav({ sections, onClose }: SectionNavProps) {
+  const { dictionary } = useI18n();
   const pathname = usePathname();
   // /app → home, /app/calendar → "calendar"
   const activeSlug = pathname.split("/")[2] ?? "";
@@ -38,7 +40,7 @@ export function SectionNav({ sections, onClose }: SectionNavProps) {
         onClick={onClose}
       >
         <LayoutDashboard className="size-4" />
-        <span>Trang chủ</span>
+        <span>{dictionary.common.home}</span>
       </Link>
 
       {sections.map((section) => {
@@ -57,7 +59,7 @@ export function SectionNav({ sections, onClose }: SectionNavProps) {
             onClick={onClose}
           >
             <Icon className="size-4" />
-            <span>{section.name}</span>
+            <span>{dictionary.sections[section.slug as keyof typeof dictionary.sections] ?? section.name}</span>
           </Link>
         );
       })}

@@ -4,6 +4,8 @@ import { getWorkspaceSections } from "@/lib/workspace/sections";
 import { SectionManager } from "@/components/workspace/section-manager";
 import { createClient } from "@/lib/supabase/server";
 import { changeAvatar, changePassword, updateDisplayName } from "@/actions/profile";
+import { LanguageSwitcher } from "@/components/settings/language-switcher";
+import { getDictionary } from "@/lib/i18n/get-dictionary";
 
 type SettingsPageProps = {
   searchParams: Promise<{ section?: string; success?: string; error?: string }>;
@@ -15,6 +17,7 @@ export default async function SettingsPage({ searchParams }: SettingsPageProps) 
   const sections = await getWorkspaceSections(user.id);
   const activeSection =
     sections.find((s) => s.slug === params.section) ?? sections[0];
+  const dict = await getDictionary();
 
   const supabase = await createClient();
   const { data: profile } = await supabase
@@ -31,31 +34,31 @@ export default async function SettingsPage({ searchParams }: SettingsPageProps) 
       <div className="mx-auto max-w-4xl space-y-8">
         {/* Header */}
         <div className="border-b border-gray-200 pb-6">
-          <h1 className="text-3xl font-semibold text-gray-900">Cài đặt</h1>
+          <h1 className="text-3xl font-semibold text-gray-900">{dict.common.settings}</h1>
           <p className="mt-2 text-gray-500">
-            Quản lý hồ sơ, mật khẩu và không gian làm việc của bạn.
+            {dict.common.settings === "Cài đặt" ? "Quản lý hồ sơ, mật khẩu và không gian làm việc của bạn." : "Manage your profile, password, and workspace."}
           </p>
         </div>
 
         {/* Status messages */}
         {success === "password" && (
           <div className="rounded-xl border border-green-200 bg-green-50 p-4 text-sm text-green-800">
-            ✓ Đổi mật khẩu thành công.
+            ✓ {dict.common.settings === "Cài đặt" ? "Đổi mật khẩu thành công." : "Password changed successfully."}
           </div>
         )}
         {success === "avatar" && (
           <div className="rounded-xl border border-green-200 bg-green-50 p-4 text-sm text-green-800">
-            ✓ Cập nhật ảnh đại diện thành công.
+            ✓ {dict.common.settings === "Cài đặt" ? "Cập nhật ảnh đại diện thành công." : "Avatar updated successfully."}
           </div>
         )}
         {success === "name" && (
           <div className="rounded-xl border border-green-200 bg-green-50 p-4 text-sm text-green-800">
-            ✓ Cập nhật tên hiển thị thành công.
+            ✓ {dict.common.settings === "Cài đặt" ? "Cập nhật tên hiển thị thành công." : "Display name updated successfully."}
           </div>
         )}
         {hasError && (
           <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-800">
-            ✗ Có lỗi xảy ra. Vui lòng kiểm tra lại thông tin.
+            ✗ {dict.common.settings === "Cài đặt" ? "Có lỗi xảy ra. Vui lòng kiểm tra lại thông tin." : "An error occurred. Please check your information."}
           </div>
         )}
 
@@ -63,7 +66,7 @@ export default async function SettingsPage({ searchParams }: SettingsPageProps) 
           {/* Left: section selector */}
           <div className="space-y-2">
             <h2 className="text-xs font-semibold uppercase tracking-wider text-gray-500">
-              Chọn phần
+              {dict.common.sections}
             </h2>
             {sections.map((section) => (
               <a
@@ -75,7 +78,7 @@ export default async function SettingsPage({ searchParams }: SettingsPageProps) 
                 href={`/app/settings?section=${section.slug}`}
                 key={section.id}
               >
-                {section.name}
+                {dict.sections[section.slug as keyof typeof dict.sections] ?? section.name}
               </a>
             ))}
           </div>
@@ -84,7 +87,7 @@ export default async function SettingsPage({ searchParams }: SettingsPageProps) 
           <div className="space-y-6">
             {/* Profile card */}
             <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-              <h3 className="text-base font-semibold text-gray-900">Hồ sơ cá nhân</h3>
+              <h3 className="text-base font-semibold text-gray-900">{dict.common.settings === "Cài đặt" ? "Hồ sơ cá nhân" : "Personal Profile"}</h3>
 
               {/* Avatar */}
               <div className="mt-4 flex items-center gap-4">
@@ -111,7 +114,7 @@ export default async function SettingsPage({ searchParams }: SettingsPageProps) 
               {/* Display name */}
               <form action={updateDisplayName} className="mt-5">
                 <label className="block text-xs font-medium text-gray-700">
-                  Tên hiển thị
+                  {dict.common.settings === "Cài đặt" ? "Tên hiển thị" : "Display Name"}
                 </label>
                 <input
                   className="mt-1 h-10 w-full rounded-lg border border-gray-300 px-3 text-sm outline-none focus:border-gray-500"
@@ -130,7 +133,7 @@ export default async function SettingsPage({ searchParams }: SettingsPageProps) 
 
             {/* Password change */}
             <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-              <h3 className="text-base font-semibold text-gray-900">Đổi mật khẩu</h3>
+              <h3 className="text-base font-semibold text-gray-900">{dict.common.settings === "Cài đặt" ? "Đổi mật khẩu" : "Change Password"}</h3>
               <form action={changePassword} className="mt-4 grid gap-3">
                 <div>
                   <label className="block text-xs font-medium text-gray-700">Mật khẩu mới</label>
@@ -158,6 +161,8 @@ export default async function SettingsPage({ searchParams }: SettingsPageProps) 
                 </button>
               </form>
             </div>
+
+            <LanguageSwitcher />
 
             {/* Section studio */}
             <div>

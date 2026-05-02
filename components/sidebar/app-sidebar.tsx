@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { ChevronRight, Sparkles, Settings } from "lucide-react";
 import { SearchCommand } from "@/components/sidebar/search-command";
 import { signOut } from "@/actions/auth";
+import { useI18n } from "@/lib/i18n/i18n-context";
 import { Button } from "@/components/ui/button";
 import { CreateDocumentButton } from "@/components/sidebar/create-document-button";
 import { DocumentTree } from "@/components/sidebar/document-tree";
@@ -28,6 +29,7 @@ export function AppSidebar({
   isMobile = false,
   onClose,
 }: AppSidebarProps) {
+  const { dictionary } = useI18n();
   const isCollapsed = useSidebarStore((state) => state.isCollapsed);
   const pathname = usePathname();
   const activeSection = pathname.split("/")[2] ?? sections[0]?.slug;
@@ -60,7 +62,7 @@ export function AppSidebar({
           <div className="space-y-6">
             <div>
               <p className="px-3 pb-2 text-xs font-medium uppercase tracking-[0.16em] text-gray-500">
-                Phần
+                {dictionary.common.sections}
               </p>
               <SectionNav onClose={onClose} sections={sections} />
             </div>
@@ -69,7 +71,7 @@ export function AppSidebar({
               <div className="flex items-center justify-between px-3">
                 <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-[0.16em] text-gray-500">
                   <Sparkles className="size-3.5" />
-                  <span>Tài liệu</span>
+                  <span>{dictionary.common.documents}</span>
                 </div>
                 {activeSection ? <CreateDocumentButton compact sectionSlug={activeSection} /> : null}
               </div>
@@ -85,7 +87,7 @@ export function AppSidebar({
                 onClick={onClose}
               >
                 <Settings className="size-4" />
-                <span>Cài đặt</span>
+                <span>{dictionary.common.settings}</span>
               </Link>
             </div>
           </div>
@@ -108,7 +110,7 @@ export function AppSidebar({
       <div className="border-t border-gray-200 p-4">
         <form action={signOut}>
           <Button className="w-full" type="submit" variant="outline">
-            {isCollapsed ? "Ra" : "Đăng xuất"}
+            {isCollapsed ? "→" : dictionary.common.signOut}
           </Button>
         </form>
       </div>

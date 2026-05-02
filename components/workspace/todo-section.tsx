@@ -1,6 +1,7 @@
 import { createTodoItem, deleteTodoItem, toggleTodoItem } from "@/actions/todo-items";
 import { todayIso } from "@/lib/date";
 import type { TodoItem } from "@/types/section-data";
+import { useI18n } from "@/lib/i18n/i18n-context";
 
 type TodoSectionProps = {
   items: TodoItem[];
@@ -15,23 +16,25 @@ const colorMap: Record<string, string> = {
 };
 
 export function TodoSection({ items }: TodoSectionProps) {
+  const { dictionary, locale } = useI18n();
+  const dict = dictionary.tasks;
   const groups = {
-    "đang làm": items.filter((item) => !item.is_done),
-    "hoàn thành": items.filter((item) => item.is_done),
+    [dictionary.tasks.todo]: items.filter((item) => !item.is_done),
+    [dictionary.tasks.done]: items.filter((item) => item.is_done),
   };
 
   return (
     <section className="grid gap-4 xl:grid-cols-[1fr_1.2fr]">
       <form action={createTodoItem} className="rounded-[2rem] border border-gray-200 bg-white p-6 shadow-sm">
         <input name="entryDate" type="hidden" value={todayIso()} />
-        <p className="text-sm font-semibold text-gray-900">Thêm công việc hôm nay</p>
+        <p className="text-sm font-semibold text-gray-900">{dict.new}</p>
         <div className="mt-4 grid gap-3">
           <input className="h-11 rounded-2xl border border-gray-300 px-3 text-sm" name="title" placeholder="Tiêu đề công việc" required />
           <select className="h-11 rounded-2xl border border-gray-300 px-3 text-sm" name="priority">
-            <option value="urgent">Khẩn cấp</option>
-            <option value="important">Quan trọng</option>
-            <option value="normal">Bình thường</option>
-            <option value="low">Thấp</option>
+            <option value="urgent">{locale === "vi" ? "Khẩn cấp" : "Urgent"}</option>
+            <option value="important">{locale === "vi" ? "Quan trọng" : "Important"}</option>
+            <option value="normal">{locale === "vi" ? "Bình thường" : "Normal"}</option>
+            <option value="low">{locale === "vi" ? "Thấp" : "Low"}</option>
           </select>
           <select className="h-11 rounded-2xl border border-gray-300 px-3 text-sm" name="color">
             <option value="red">Red</option>
@@ -59,11 +62,11 @@ export function TodoSection({ items }: TodoSectionProps) {
                       <form action={toggleTodoItem}>
                         <input name="id" type="hidden" value={item.id} />
                         <input name="isDone" type="hidden" value={String(item.is_done)} />
-                        <button className="text-xs font-medium text-gray-500" type="submit">{item.is_done ? "Hoàn tác" : "Xong"}</button>
+                        <button className="text-xs font-medium text-gray-500" type="submit">{item.is_done ? (locale === "vi" ? "Hoàn tác" : "Undo") : dictionary.tasks.done}</button>
                       </form>
                       <form action={deleteTodoItem}>
                         <input name="id" type="hidden" value={item.id} />
-                        <button className="text-xs font-medium text-rose-700" type="submit">Xoá</button>
+                        <button className="text-xs font-medium text-rose-700" type="submit">{dictionary.common.delete}</button>
                       </form>
                     </div>
                   </div>

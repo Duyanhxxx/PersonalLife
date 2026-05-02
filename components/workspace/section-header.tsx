@@ -1,6 +1,7 @@
 import { CreateDocumentButton } from "@/components/sidebar/create-document-button";
 import { sectionThemes } from "@/lib/workspace/section-theme";
 import type { SystemSectionSlug } from "@/types/workspace";
+import { useI18n } from "@/lib/i18n/i18n-context";
 
 const DATA_SECTIONS = new Set(["calendar", "finance", "tasks", "missions", "reading", "habits"]);
 
@@ -13,9 +14,13 @@ export function SectionHeader({
   sectionSlug,
   sectionName,
 }: SectionHeaderProps) {
+  const { dictionary } = useI18n();
   const theme =
     sectionThemes[sectionSlug as SystemSectionSlug] ?? sectionThemes.notes;
   const showDocButtons = !DATA_SECTIONS.has(sectionSlug);
+
+  const localizedName = dictionary.sections[sectionSlug as keyof typeof dictionary.sections] ?? sectionName;
+  const localizedDesc = dictionary.descriptions[sectionSlug as keyof typeof dictionary.descriptions] ?? "";
 
   return (
     <section className={`overflow-hidden rounded-[2rem] bg-gradient-to-br ${theme.accent} p-[1px] shadow-md`}>
@@ -23,20 +28,20 @@ export function SectionHeader({
         <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-2xl">
             <span className={`inline-flex rounded-full px-3 py-1 text-sm font-semibold ${theme.pill}`}>
-              {sectionName}
+              {localizedName}
             </span>
             <h2 className="mt-4 text-4xl font-semibold tracking-tight text-gray-900 md:text-5xl">
-              {sectionName}
+              {localizedName}
             </h2>
             <p className="mt-4 max-w-xl text-base leading-7 text-gray-700">
-              {theme.description}
+              {localizedDesc}
             </p>
           </div>
 
           {showDocButtons && (
             <div className="flex flex-wrap gap-3">
               <CreateDocumentButton sectionSlug={sectionSlug} />
-              <CreateDocumentButton kind="database" sectionSlug={sectionSlug} title={`${sectionName} Database`} />
+              <CreateDocumentButton kind="database" sectionSlug={sectionSlug} title={`${localizedName} Database`} />
             </div>
           )}
         </div>

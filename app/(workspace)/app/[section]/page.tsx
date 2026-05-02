@@ -87,7 +87,7 @@ export default async function SectionPage({ params, searchParams }: SectionPageP
             {/* Lưu trữ panel — only for document sections */}
             <aside className={`rounded-[2rem] border border-gray-200 ${theme.surface} p-6 shadow-sm`}>
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gray-500">Lưu trữ</p>
-              <h3 className="mt-3 text-xl font-semibold text-gray-900">Lưu trữd pages</h3>
+              <h3 className="mt-3 text-xl font-semibold text-gray-900">Trang đã lưu trữ</h3>
               <div className="mt-4 space-y-3">
                 {sectionDocs?.archived.length ? (
                   sectionDocs.archived.map((doc) => (

@@ -3,6 +3,7 @@ import { addMonth } from "@/lib/date";
 import { getFinanceEntries } from "@/lib/workspace/finance";
 import { MonthGrid } from "@/components/workspace/month-grid";
 import type { AwaitedReturn } from "@/types/utils";
+import { formatCurrency } from "@/lib/format";
 import Link from "next/link";
 
 type FinanceSectionProps = {
@@ -38,7 +39,7 @@ export function FinanceSection({ data }: FinanceSectionProps) {
             date: entry.entry_date,
             label: entry.title,
             tone: entry.entry_type === "income" ? "green" : "red",
-            secondary: `$${Number(entry.amount).toFixed(2)}`,
+            secondary: formatCurrency(Number(entry.amount)),
           }))}
           month={data.monthKey}
         />
@@ -46,9 +47,9 @@ export function FinanceSection({ data }: FinanceSectionProps) {
           <div className="rounded-[2rem] border border-gray-200 bg-white p-6 shadow-sm">
             <p className="text-sm font-semibold text-gray-900">Tổng hợp tháng</p>
             <div className="mt-4 space-y-2 text-sm text-gray-700">
-              <p>Thu nhập: <span className="font-semibold text-gray-900">${summary.income.toFixed(2)}</span></p>
-              <p>Chi tiêu: <span className="font-semibold text-gray-900">${summary.expense.toFixed(2)}</span></p>
-              <p>Cân bằng: <span className="font-semibold text-gray-900">${(summary.income - summary.expense).toFixed(2)}</span></p>
+              <p>Thu nhập: <span className="font-semibold text-gray-900">{formatCurrency(summary.income)}</span></p>
+              <p>Chi tiêu: <span className="font-semibold text-gray-900">{formatCurrency(summary.expense)}</span></p>
+              <p>Cân bằng: <span className="font-semibold text-gray-900">{formatCurrency(summary.income - summary.expense)}</span></p>
             </div>
           </div>
           <form action={createFinanceEntry} className="rounded-[2rem] border border-gray-200 bg-white p-6 shadow-sm">
@@ -76,7 +77,7 @@ export function FinanceSection({ data }: FinanceSectionProps) {
                     <p className="text-xs text-gray-500">{entry.entry_date} • {entry.category}</p>
                   </div>
                   <button className="text-xs font-medium text-rose-700" type="submit">
-                    {entry.entry_type === "income" ? "+" : "-"}${Number(entry.amount).toFixed(2)}
+                    {entry.entry_type === "income" ? "+" : "-"}{formatCurrency(Number(entry.amount))}
                   </button>
                 </form>
               ))}

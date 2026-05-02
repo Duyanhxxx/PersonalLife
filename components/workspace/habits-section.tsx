@@ -1,5 +1,6 @@
 import { createHabit, deleteHabit, toggleHabitLog } from "@/actions/habits";
 import type { Habit, HabitLog } from "@/lib/workspace/habits";
+import { useI18n } from "@/lib/i18n/i18n-context";
 
 type HabitsSectionProps = {
   habits: (Habit & { streak: number })[];
@@ -15,6 +16,8 @@ const colorMap: Record<string, { bg: string; ring: string; check: string }> = {
 };
 
 export function HabitsSection({ habits, todayLogs }: HabitsSectionProps) {
+  const { dictionary, locale } = useI18n();
+  const dict = dictionary.habits;
   const logMap = new Map(todayLogs.map((l) => [l.habit_id, l.id]));
 
   return (
@@ -24,7 +27,7 @@ export function HabitsSection({ habits, todayLogs }: HabitsSectionProps) {
         action={createHabit}
         className="rounded-[2rem] border border-gray-200 bg-white p-6 shadow-sm"
       >
-        <p className="text-sm font-semibold text-gray-900">Thêm thói quen mới</p>
+        <p className="text-sm font-semibold text-gray-900">{dict.new}</p>
         <div className="mt-4 grid gap-3">
           <input
             className="h-11 rounded-2xl border border-gray-300 px-3 text-sm"
@@ -51,11 +54,11 @@ export function HabitsSection({ habits, todayLogs }: HabitsSectionProps) {
       {/* Habit list */}
       <div className="space-y-3">
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gray-500">
-          Hôm nay — đánh dấu những gì bạn đã làm
+          {locale === "vi" ? "Hôm nay — đánh dấu những gì bạn đã làm" : "Today — mark what you've done"}
         </p>
         {habits.length === 0 ? (
           <div className="rounded-[2rem] border border-dashed border-gray-200 bg-white p-8 text-center text-sm text-gray-700">
-            Chưa có thói quen nào. Tạo thói quen đầu tiên của bạn.
+            {locale === "vi" ? "Chưa có thói quen nào. Tạo thói quen đầu tiên của bạn." : "No habits yet. Create your first habit."}
           </div>
         ) : (
           habits.map((habit) => {
@@ -100,7 +103,7 @@ export function HabitsSection({ habits, todayLogs }: HabitsSectionProps) {
                       </p>
                       {habit.streak > 0 && (
                         <span className="flex items-center gap-1 text-xs font-semibold text-orange-600">
-                          🔥 {habit.streak} ngày
+                          🔥 {habit.streak} {dict.streak}
                         </span>
                       )}
                     </div>
@@ -114,7 +117,7 @@ export function HabitsSection({ habits, todayLogs }: HabitsSectionProps) {
                 <form action={deleteHabit}>
                   <input name="id" type="hidden" value={habit.id} />
                   <button className="text-xs font-medium text-rose-600" type="submit">
-                    Xoá
+                    {dictionary.common.delete}
                   </button>
                 </form>
               </div>
@@ -123,7 +126,7 @@ export function HabitsSection({ habits, todayLogs }: HabitsSectionProps) {
         )}
         {habits.length > 0 && (
           <p className="pt-1 text-right text-xs text-gray-500">
-            {logMap.size} / {habits.length} hoàn thành hôm nay
+            {logMap.size} / {habits.length} {dict.completed}
           </p>
         )}
       </div>
