@@ -1,7 +1,7 @@
 import { createTodoItem, deleteTodoItem, toggleTodoItem } from "@/actions/todo-items";
 import { todayIso } from "@/lib/date";
 import type { TodoItem } from "@/types/section-data";
-import { useI18n } from "@/lib/i18n/i18n-context";
+import { getDictionary, getLanguage } from "@/lib/i18n/get-dictionary";
 
 type TodoSectionProps = {
   items: TodoItem[];
@@ -15,8 +15,9 @@ const colorMap: Record<string, string> = {
   green: "bg-emerald-100 text-emerald-700",
 };
 
-export function TodoSection({ items }: TodoSectionProps) {
-  const { dictionary, locale } = useI18n();
+export async function TodoSection({ items }: TodoSectionProps) {
+  const dictionary = await getDictionary();
+  const locale = await getLanguage();
   const dict = dictionary.tasks;
   const groups = {
     [dictionary.tasks.todo]: items.filter((item) => !item.is_done),

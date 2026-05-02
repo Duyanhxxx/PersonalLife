@@ -1,7 +1,7 @@
 import { CreateDocumentButton } from "@/components/sidebar/create-document-button";
 import { sectionThemes } from "@/lib/workspace/section-theme";
 import type { SystemSectionSlug } from "@/types/workspace";
-import { useI18n } from "@/lib/i18n/i18n-context";
+import { getDictionary } from "@/lib/i18n/get-dictionary";
 
 const DATA_SECTIONS = new Set(["calendar", "finance", "tasks", "missions", "reading", "habits"]);
 
@@ -10,11 +10,11 @@ type SectionHeaderProps = {
   sectionName: string;
 };
 
-export function SectionHeader({
+export async function SectionHeader({
   sectionSlug,
   sectionName,
 }: SectionHeaderProps) {
-  const { dictionary } = useI18n();
+  const dictionary = await getDictionary();
   const theme =
     sectionThemes[sectionSlug as SystemSectionSlug] ?? sectionThemes.notes;
   const showDocButtons = !DATA_SECTIONS.has(sectionSlug);

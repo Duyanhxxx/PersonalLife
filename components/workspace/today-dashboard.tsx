@@ -1,3 +1,4 @@
+"use client";
 import { getTodayDashboard } from "@/lib/workspace/dashboard";
 import { useI18n } from "@/lib/i18n/i18n-context";
 import { formatCurrency } from "@/lib/format";

@@ -1,6 +1,6 @@
 import { createHabit, deleteHabit, toggleHabitLog } from "@/actions/habits";
 import type { Habit, HabitLog } from "@/lib/workspace/habits";
-import { useI18n } from "@/lib/i18n/i18n-context";
+import { getDictionary, getLanguage } from "@/lib/i18n/get-dictionary";
 
 type HabitsSectionProps = {
   habits: (Habit & { streak: number })[];
@@ -15,8 +15,9 @@ const colorMap: Record<string, { bg: string; ring: string; check: string }> = {
   red: { bg: "bg-rose-100", ring: "ring-rose-300", check: "bg-rose-500" },
 };
 
-export function HabitsSection({ habits, todayLogs }: HabitsSectionProps) {
-  const { dictionary, locale } = useI18n();
+export async function HabitsSection({ habits, todayLogs }: HabitsSectionProps) {
+  const dictionary = await getDictionary();
+  const locale = await getLanguage();
   const dict = dictionary.habits;
   const logMap = new Map(todayLogs.map((l) => [l.habit_id, l.id]));
 
