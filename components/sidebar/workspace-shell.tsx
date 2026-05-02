@@ -36,7 +36,7 @@ export function WorkspaceShell({
       <Dialog.Root open={isMobileOpen} onOpenChange={setIsMobileOpen}>
         <Dialog.Portal>
           <Dialog.Backdrop className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm transition-all duration-300 data-[state=closed]:opacity-0 data-[state=open]:opacity-100" />
-          <Dialog.Content className="fixed inset-y-0 left-0 z-50 w-[300px] bg-white shadow-xl transition-all duration-300 data-[state=closed]:-translate-x-full data-[state=open]:translate-x-0 outline-none">
+          <Dialog.Popup className="fixed inset-y-0 left-0 z-50 w-[300px] bg-white shadow-xl transition-all duration-300 data-[state=closed]:-translate-x-full data-[state=open]:translate-x-0 outline-none">
             <div className="flex h-full flex-col">
               <div className="flex items-center justify-between border-b border-gray-200 px-4 py-4">
                 <div className="flex items-center gap-3">
@@ -61,7 +61,7 @@ export function WorkspaceShell({
                 />
               </div>
             </div>
-          </Dialog.Content>
+          </Dialog.Popup>
         </Dialog.Portal>
       </Dialog.Root>
 

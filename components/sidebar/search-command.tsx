@@ -61,7 +61,7 @@ export function SearchCommand() {
       <Dialog.Root open={open} onOpenChange={setOpen}>
         <Dialog.Portal>
           <Dialog.Backdrop className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm transition-all duration-300 data-[state=closed]:opacity-0 data-[state=open]:opacity-100" />
-          <Dialog.Content className="fixed left-1/2 top-[20%] z-50 w-full max-w-lg -translate-x-1/2 rounded-[2rem] border border-gray-200 bg-white p-2 shadow-2xl transition-all duration-300 data-[state=closed]:scale-95 data-[state=closed]:opacity-0 data-[state=open]:scale-100 data-[state=open]:opacity-100 outline-none">
+          <Dialog.Popup className="fixed left-1/2 top-[20%] z-50 w-full max-w-lg -translate-x-1/2 rounded-[2rem] border border-gray-200 bg-white p-2 shadow-2xl transition-all duration-300 data-[state=closed]:scale-95 data-[state=closed]:opacity-0 data-[state=open]:scale-100 data-[state=open]:opacity-100 outline-none">
             <div className="flex items-center gap-3 border-b border-gray-100 px-4 py-3">
               <Search className="size-5 text-gray-400" />
               <input
@@ -123,7 +123,7 @@ export function SearchCommand() {
                 <span>để đóng</span>
               </div>
             </div>
-          </Dialog.Content>
+          </Dialog.Popup>
         </Dialog.Portal>
       </Dialog.Root>
     </>
