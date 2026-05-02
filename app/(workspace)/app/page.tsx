@@ -5,12 +5,15 @@ import { getWorkspaceSections } from "@/lib/workspace/sections";
 import Link from "next/link";
 import { sectionThemes } from "@/lib/workspace/section-theme";
 import type { SystemSectionSlug } from "@/types/workspace";
+import { getDictionary, getLanguage } from "@/lib/i18n/get-dictionary";
 
 export default async function WorkspaceHomePage() {
   const user = await requireUser();
-  const [dashboard, sections] = await Promise.all([
+  const [dashboard, sections, dict, locale] = await Promise.all([
     getTodayDashboard(user.id),
     getWorkspaceSections(user.id),
+    getDictionary(),
+    getLanguage(),
   ]);
 
   return (
@@ -19,7 +22,7 @@ export default async function WorkspaceHomePage() {
         {/* Header */}
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gray-500">
-            {new Intl.DateTimeFormat("en-US", {
+            {new Intl.DateTimeFormat(locale === "vi" ? "vi-VN" : "en-US", {
               weekday: "long",
               year: "numeric",
               month: "long",
@@ -28,7 +31,7 @@ export default async function WorkspaceHomePage() {
             }).format(new Date())}
           </p>
           <h1 className="mt-2 text-4xl font-semibold tracking-tight text-gray-900">
-            Chào ngày mới — here&apos;s your overview.
+            {dict.dashboard.welcome} — {locale === "vi" ? "đây là tổng quan của bạn." : "here's your overview."}
           </h1>
         </div>
 
@@ -37,7 +40,7 @@ export default async function WorkspaceHomePage() {
         {/* Quick-nav section cards */}
         <div>
           <p className="mb-4 text-xs font-semibold uppercase tracking-[0.18em] text-gray-500">
-            Đến phần
+            {locale === "vi" ? "Đến phần" : "Go to section"}
           </p>
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {sections.map((section) => {
@@ -51,10 +54,10 @@ export default async function WorkspaceHomePage() {
                   key={section.id}
                 >
                   <span className={`inline-flex rounded-full px-2.5 py-1 text-xs font-semibold ${theme.pill}`}>
-                    {section.name}
+                    {dict.sections[section.slug as keyof typeof dict.sections] ?? section.name}
                   </span>
                   <p className="mt-3 text-sm leading-6 text-gray-700">
-                    {theme.description}
+                    {dict.descriptions[section.slug as keyof typeof dict.descriptions] ?? ""}
                   </p>
                 </Link>
               );
