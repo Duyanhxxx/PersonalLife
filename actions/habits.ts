@@ -39,9 +39,10 @@ export async function toggleHabitLog(formData: FormData) {
   } else {
     await supabase
       .from("habit_logs")
-      .insert({ habit_id: habitId, user_id: user.id })
-      .onConflict("habit_id, log_date")
-      .ignore();
+      .upsert(
+        { habit_id: habitId, user_id: user.id },
+        { onConflict: "habit_id,log_date", ignoreDuplicates: true },
+      );
   }
 
   revalidatePath("/app/habits");
