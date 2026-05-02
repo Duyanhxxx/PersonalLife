@@ -4,7 +4,7 @@ import { DocumentPanel } from "@/components/workspace/document-panel";
 import { FinanceSection } from "@/components/workspace/finance-section";
 import { HabitsSection } from "@/components/workspace/habits-section";
 import { MissionsSection } from "@/components/workspace/missions-section";
-import { Đang đọcSection } from "@/components/workspace/reading-section";
+import { ReadingSection } from "@/components/workspace/reading-section";
 import { SectionHeader } from "@/components/workspace/section-header";
 import { TodoSection } from "@/components/workspace/todo-section";
 import { restoreDocument } from "@/actions/documents";
@@ -13,10 +13,10 @@ import { getFinanceEntries } from "@/lib/workspace/finance";
 import { getHabits } from "@/lib/workspace/habits";
 import { getMissions } from "@/lib/workspace/missions";
 import { getPlannerEvents } from "@/lib/workspace/planner";
-import { getĐang đọcBooks } from "@/lib/workspace/reading";
-import { getSectionTài liệu } from "@/lib/workspace/documents";
+import { getReadingBooks } from "@/lib/workspace/reading";
+import { getSectionDocuments } from "@/lib/workspace/documents";
 import { sectionThemes } from "@/lib/workspace/section-theme";
-import { getWorkspacePhần } from "@/lib/workspace/sections";
+import { getWorkspaceSections } from "@/lib/workspace/sections";
 import { getTodoItems } from "@/lib/workspace/todos";
 import type { SystemSectionSlug } from "@/types/workspace";
 
@@ -32,7 +32,7 @@ export default async function SectionPage({ params, searchParams }: SectionPageP
   const { section: sectionSlug } = await params;
   const { document: documentParam, month } = await searchParams;
 
-  const sections = await getWorkspacePhần(user.id);
+  const sections = await getWorkspaceSections(user.id);
   const activeSection = sections.find((s) => s.slug === sectionSlug);
   if (!activeSection) notFound();
 
@@ -47,9 +47,9 @@ export default async function SectionPage({ params, searchParams }: SectionPageP
       sectionSlug === "finance" ? getFinanceEntries(user.id, month) : null,
       sectionSlug === "tasks" ? getTodoItems(user.id) : null,
       sectionSlug === "missions" ? getMissions(user.id) : null,
-      sectionSlug === "reading" ? getĐang đọcBooks(user.id) : null,
+      sectionSlug === "reading" ? getReadingBooks(user.id) : null,
       sectionSlug === "habits" ? getHabits(user.id) : null,
-      !isDataSection ? getSectionTài liệu(user.id, activeSection.id) : null,
+      !isDataSection ? getSectionDocuments(user.id, activeSection.id) : null,
     ]);
 
   const activeDocument =
@@ -67,9 +67,9 @@ export default async function SectionPage({ params, searchParams }: SectionPageP
   } else if (sectionSlug === "missions" && missionsData) {
     content = <MissionsSection missions={missionsData.missions} todayEntries={missionsData.todayEntries} />;
   } else if (sectionSlug === "reading" && readingBooks) {
-    content = <Đang đọcSection books={readingBooks} />;
+    content = <ReadingSection books={readingBooks} />;
   } else if (sectionSlug === "habits" && habitsData) {
-    content = <HabitsSection habits={habitsData.habits} todayGhi lạis={habitsData.todayGhi lạis} />;
+    content = <HabitsSection habits={habitsData.habits} todayLogs={habitsData.todayLogs} />;
   } else {
     content = <DocumentPanel document={activeDocument} sectionSlug={sectionSlug} />;
   }

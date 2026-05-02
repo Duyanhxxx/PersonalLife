@@ -1,5 +1,6 @@
 import { archiveDocument, renameDocument } from "@/actions/documents";
-import { TemplateTrướciew } from "@/components/workspace/template-preview";
+import { TemplatePreview } from "@/components/workspace/template-preview";
+import { TiptapEditor } from "@/components/editor/tiptap-editor";
 import type { DocumentRow } from "@/types/document";
 
 type DocumentPanelProps = {
@@ -13,7 +14,7 @@ export function DocumentPanel({ document, sectionSlug }: DocumentPanelProps) {
       <section className="rounded-[2rem] border border-gray-200 bg-white p-8 shadow-sm">
         <h3 className="text-2xl font-semibold text-gray-900">Chọn một trang để bắt đầu chỉnh sửa.</h3>
         <p className="mt-3 max-w-2xl text-sm leading-7 text-gray-700">
-          Thanh bên hỗ trợ tài liệu lồng nhau thực sự. Create a page or database, then choose it here to rename, review, or archive it.
+          Thanh bên hỗ trợ tài liệu lồng nhau thực sự. Tạo một trang hoặc cơ sở dữ liệu, sau đó chọn nó ở đây để đổi tên, xem xét hoặc lưu trữ.
         </p>
       </section>
     );
@@ -30,7 +31,7 @@ export function DocumentPanel({ document, sectionSlug }: DocumentPanelProps) {
             {document.title}
           </h3>
           <p className="mt-3 text-sm leading-7 text-gray-700">
-            This is the selected {document.kind}. The full rich editor comes in the next phase, but the document structure and lifecycle are now live.
+            Đây là {document.kind} đã chọn. Cấu trúc tài liệu và vòng đời hiện đã hoạt động.
           </p>
         </div>
 
@@ -45,6 +46,12 @@ export function DocumentPanel({ document, sectionSlug }: DocumentPanelProps) {
           </button>
         </form>
       </div>
+
+      <TiptapEditor
+        documentId={document.id}
+        initialContent={document.content}
+        sectionSlug={sectionSlug}
+      />
 
       <div className="mt-8 grid gap-4 lg:grid-cols-[1.5fr_1fr]">
         <form action={renameDocument} className="rounded-3xl border border-gray-200 bg-gray-50 p-5">
@@ -62,7 +69,7 @@ export function DocumentPanel({ document, sectionSlug }: DocumentPanelProps) {
             className="mt-4 rounded-2xl bg-gray-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-gray-800"
             type="submit"
           >
-            Lưu title
+            Lưu tiêu đề
           </button>
         </form>
 
@@ -85,7 +92,7 @@ export function DocumentPanel({ document, sectionSlug }: DocumentPanelProps) {
         </div>
       </div>
 
-      <TemplateTrướciew metadata={document.metadata} />
+      <TemplatePreview metadata={document.metadata} />
     </section>
   );
 }

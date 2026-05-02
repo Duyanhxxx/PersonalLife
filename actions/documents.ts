@@ -67,7 +67,24 @@ export async function createDocument(formData: FormData) {
     .single();
 
   revalidatePath("/app");
-  redirect(`/app?section=${sectionSlug}&document=${data?.id ?? ""}`);
+  redirect(`/app/${sectionSlug}?document=${data?.id ?? ""}`);
+}
+
+export async function updateDocumentContent(id: string, content: any, sectionSlug: string) {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return;
+
+  await supabase
+    .from("documents")
+    .update({ 
+      content, 
+      updated_at: new Date().toISOString(),
+      last_edited_by: user.id 
+    })
+    .eq("id", id);
+
+  revalidatePath(`/app/${sectionSlug}`);
 }
 
 export async function renameDocument(formData: FormData) {
@@ -93,7 +110,7 @@ export async function archiveDocument(formData: FormData) {
     .eq("id", id);
 
   revalidatePath("/app");
-  redirect(`/app?section=${sectionSlug}`);
+  redirect(`/app/${sectionSlug}`);
 }
 
 export async function restoreDocument(formData: FormData) {
@@ -110,5 +127,25 @@ export async function restoreDocument(formData: FormData) {
     .eq("id", id);
 
   revalidatePath("/app");
-  redirect(`/app?section=${sectionSlug}&document=${id}`);
+  redirect(`/app/${sectionSlug}?document=${id}`);
 }
+
+export async function searchDocuments(query: string) {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user || !query.trim()) return [];
+
+  const { data } = await supabase
+    .from("documents")
+    .select("id, title, workspace_sections(slug)")
+    .eq("user_id", user.id)
+    .ilike("title", `%${query}%`)
+    .limit(10);
+
+  return (data || []).map(doc => ({
+    id: doc.id,
+    title: doc.title,
+    sectionSlug: (doc.workspace_sections as any)?.slug || "notes"
+  }));
+}
+

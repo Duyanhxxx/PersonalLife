@@ -1,9 +1,9 @@
-import { createHabit, deleteHabit, toggleHabitGhi lại } from "@/actions/habits";
-import type { Habit, HabitGhi lại } from "@/lib/workspace/habits";
+import { createHabit, deleteHabit, toggleHabitLog } from "@/actions/habits";
+import type { Habit, HabitLog } from "@/lib/workspace/habits";
 
 type HabitsSectionProps = {
-  habits: Habit[];
-  todayGhi lạis: HabitGhi lại[];
+  habits: (Habit & { streak: number })[];
+  todayLogs: HabitLog[];
 };
 
 const colorMap: Record<string, { bg: string; ring: string; check: string }> = {
@@ -14,8 +14,8 @@ const colorMap: Record<string, { bg: string; ring: string; check: string }> = {
   red: { bg: "bg-rose-100", ring: "ring-rose-300", check: "bg-rose-500" },
 };
 
-export function HabitsSection({ habits, todayGhi lạis }: HabitsSectionProps) {
-  const logMap = new Map(todayGhi lạis.map((l) => [l.habit_id, l.id]));
+export function HabitsSection({ habits, todayLogs }: HabitsSectionProps) {
+  const logMap = new Map(todayLogs.map((l) => [l.habit_id, l.id]));
 
   return (
     <section className="grid gap-6 xl:grid-cols-[1fr_1.4fr]">
@@ -74,9 +74,9 @@ export function HabitsSection({ habits, todayGhi lạis }: HabitsSectionProps) {
               >
                 <div className="flex items-center gap-4">
                   {/* Toggle button */}
-                  <form action={toggleHabitGhi lại}>
+                  <form action={toggleHabitLog}>
                     <input name="habitId" type="hidden" value={habit.id} />
-                    <input name="isXong" type="hidden" value={String(isXong)} />
+                    <input name="isDone" type="hidden" value={String(isXong)} />
                     <input name="logId" type="hidden" value={logId ?? ""} />
                     <button
                       className={`flex h-8 w-8 items-center justify-center rounded-full ring-2 transition ${colors.ring} ${
@@ -94,9 +94,16 @@ export function HabitsSection({ habits, todayGhi lạis }: HabitsSectionProps) {
                   </form>
 
                   <div>
-                    <p className={`font-medium ${isXong ? "text-gray-500 line-through" : "text-gray-900"}`}>
-                      {habit.title}
-                    </p>
+                    <div className="flex items-center gap-2">
+                      <p className={`font-medium ${isXong ? "text-gray-500 line-through" : "text-gray-900"}`}>
+                        {habit.title}
+                      </p>
+                      {habit.streak > 0 && (
+                        <span className="flex items-center gap-1 text-xs font-semibold text-orange-600">
+                          🔥 {habit.streak} ngày
+                        </span>
+                      )}
+                    </div>
                     <span className={`inline-block mt-1 rounded-full px-2 py-0.5 text-xs ${colors.bg} text-gray-900`}>
                       {habit.color}
                     </span>
@@ -116,7 +123,7 @@ export function HabitsSection({ habits, todayGhi lạis }: HabitsSectionProps) {
         )}
         {habits.length > 0 && (
           <p className="pt-1 text-right text-xs text-gray-500">
-            {logMap.size} / {habits.length} hoàn thành today
+            {logMap.size} / {habits.length} hoàn thành hôm nay
           </p>
         )}
       </div>

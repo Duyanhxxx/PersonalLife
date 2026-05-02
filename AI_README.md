@@ -150,12 +150,10 @@
 - Settings actions live in `actions/profile.ts`: `changePassword`, `changeAvatar`, `updateDisplayName`
 
 ## What Still Needs Work
-- **Rich text editor**: `DocumentPanel` shows a placeholder; TipTap or Novel not yet connected
-- **Search**: UI exists in sidebar but has no handler or query
-- **Mobile sidebar**: Sidebar is `hidden md:flex`; no mobile hamburger drawer
-- **Edit flows**: Calendar/Finance/Tasks/Missions/Reading/Habits support create & delete but no inline edit
+- **Edit flows**: Calendar/Finance/Tasks/Missions/Reading support create & delete but no inline edit
 - **Realtime updates**: All data is server-fetched; no Supabase realtime subscriptions or optimistic UI
-- **Habit streak display**: `habit_logs` table exists but streak computation not yet surfaced in UI
+- **Notifications**: System for reminders or goal achievements
+- **Data Export**: Ability to export workspace data as JSON/Markdown
 
 ## Next Steps
 - Apply all SQL migrations in Supabase (including `20260502000000_habits.sql` and `20260502000100_profile_avatar.sql`)

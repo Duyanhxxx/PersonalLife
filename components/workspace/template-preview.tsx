@@ -1,6 +1,6 @@
 import type { MetadataValue } from "@/types/document";
 
-type TemplateTrướciewProps = {
+type TemplatePreviewProps = {
   metadata?: { [key: string]: MetadataValue } | null;
 };
 
@@ -45,7 +45,7 @@ function isStringArray(value: MetadataValue | undefined): value is string[] {
   return Array.isArray(value) && value.every((item) => typeof item === "string");
 }
 
-export function TemplateTrướciew({ metadata }: TemplateTrướciewProps) {
+export function TemplatePreview({ metadata }: TemplatePreviewProps) {
   const template = metadata?.template;
 
   if (!metadata || typeof template !== "string") {
@@ -113,7 +113,7 @@ export function TemplateTrướciew({ metadata }: TemplateTrướciewProps) {
     return (
       <div className="mt-8 space-y-4">
         <div className="rounded-3xl border border-gray-200 bg-gray-50 p-5">
-          <p className="text-sm font-medium text-gray-900">Core principles</p>
+          <p className="text-sm font-medium text-gray-900">Nguyên tắc cốt lõi</p>
           <div className="mt-3 flex flex-wrap gap-2">
             {principles.map((principle) => (
               <span className="rounded-full bg-gray-100 px-3 py-2 text-sm text-gray-900" key={principle}>

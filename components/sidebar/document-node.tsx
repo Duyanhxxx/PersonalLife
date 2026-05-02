@@ -10,6 +10,7 @@ type DocumentNodeProps = {
   node: DocumentTreeNode;
   sectionSlug: string;
   activeDocumentId?: string;
+  onClose?: () => void;
 };
 
 function hasActiveDescendant(node: DocumentTreeNode, activeId?: string): boolean {
@@ -28,6 +29,7 @@ export function DocumentNode({
   node,
   sectionSlug,
   activeDocumentId,
+  onClose,
 }: DocumentNodeProps) {
   const startsOpen = useMemo(
     () => node.children.length > 0 && hasActiveDescendant(node, activeDocumentId),
@@ -59,7 +61,8 @@ export function DocumentNode({
 
         <Link
           className="flex min-w-0 flex-1 items-center gap-2 py-2 text-sm"
-          href={`/app?section=${sectionSlug}&document=${node.id}`}
+          href={`/app/${sectionSlug}?document=${node.id}`}
+          onClick={onClose}
         >
           <Icon className="size-4 shrink-0" />
           <span className="truncate">{node.title}</span>
@@ -77,6 +80,7 @@ export function DocumentNode({
               activeDocumentId={activeDocumentId}
               key={child.id}
               node={child}
+              onClose={onClose}
               sectionSlug={sectionSlug}
             />
           ))}

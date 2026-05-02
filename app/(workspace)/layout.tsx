@@ -1,6 +1,6 @@
 import { requireUser } from "@/lib/auth/session";
-import { getTài liệuForSidebar, groupTài liệuBySection } from "@/lib/workspace/documents";
-import { getWorkspacePhần } from "@/lib/workspace/sections";
+import { getDocumentsForSidebar, groupDocumentsBySection } from "@/lib/workspace/documents";
+import { getWorkspaceSections } from "@/lib/workspace/sections";
 import { WorkspaceShell } from "@/components/sidebar/workspace-shell";
 
 type WorkspaceLayoutProps = {
@@ -11,9 +11,9 @@ export default async function WorkspaceLayout({
   children,
 }: WorkspaceLayoutProps) {
   const user = await requireUser();
-  const sections = await getWorkspacePhần(user.id);
-  const documents = await getTài liệuForSidebar(user.id);
-  const documentsBySection = groupTài liệuBySection(documents, sections);
+  const sections = await getWorkspaceSections(user.id);
+  const documents = await getDocumentsForSidebar(user.id);
+  const documentsBySection = groupDocumentsBySection(documents, sections);
 
   return (
     <WorkspaceShell

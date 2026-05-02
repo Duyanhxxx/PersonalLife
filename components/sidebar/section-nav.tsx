@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BookOpen, CalendarDays, CircleDollarSign, FileText, ListTodo, Target, Waves, LayoutTrang chủ } from "lucide-react";
+import { BookOpen, CalendarDays, CircleDollarSign, FileText, ListTodo, Target, Waves, LayoutDashboard } from "lucide-react";
 import type { WorkspaceSection } from "@/lib/workspace/sections";
 
 type SectionNavProps = {
   sections: WorkspaceSection[];
+  onClose?: () => void;
 };
 
 const iconMap: Record<string, React.ElementType> = {
@@ -19,7 +20,7 @@ const iconMap: Record<string, React.ElementType> = {
   reading: BookOpen,
 };
 
-export function SectionNav({ sections }: SectionNavProps) {
+export function SectionNav({ sections, onClose }: SectionNavProps) {
   const pathname = usePathname();
   // /app → home, /app/calendar → "calendar"
   const activeSlug = pathname.split("/")[2] ?? "";
@@ -34,8 +35,9 @@ export function SectionNav({ sections }: SectionNavProps) {
             : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
         }`}
         href="/app"
+        onClick={onClose}
       >
-        <LayoutTrang chủ className="size-4" />
+        <LayoutDashboard className="size-4" />
         <span>Trang chủ</span>
       </Link>
 
@@ -52,6 +54,7 @@ export function SectionNav({ sections }: SectionNavProps) {
             }`}
             href={`/app/${section.slug}`}
             key={section.id}
+            onClick={onClose}
           >
             <Icon className="size-4" />
             <span>{section.name}</span>

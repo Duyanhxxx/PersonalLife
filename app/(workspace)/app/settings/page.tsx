@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { requireUser } from "@/lib/auth/session";
-import { getWorkspacePhần } from "@/lib/workspace/sections";
+import { getWorkspaceSections } from "@/lib/workspace/sections";
 import { SectionManager } from "@/components/workspace/section-manager";
 import { createClient } from "@/lib/supabase/server";
 import { changeAvatar, changePassword, updateDisplayName } from "@/actions/profile";
@@ -12,7 +12,7 @@ type SettingsPageProps = {
 export default async function SettingsPage({ searchParams }: SettingsPageProps) {
   const user = await requireUser();
   const params = await searchParams;
-  const sections = await getWorkspacePhần(user.id);
+  const sections = await getWorkspaceSections(user.id);
   const activeSection =
     sections.find((s) => s.slug === params.section) ?? sections[0];
 

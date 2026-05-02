@@ -1,12 +1,12 @@
 import Link from "next/link";
 import type { AwaitedReturn } from "@/types/utils";
-import { getTodayTrang chủ } from "@/lib/workspace/dashboard";
+import { getTodayDashboard } from "@/lib/workspace/dashboard";
 
-type TodayTrang chủProps = {
-  data: AwaitedReturn<typeof getTodayTrang chủ>;
+type TodayDashboardProps = {
+  data: AwaitedReturn<typeof getTodayDashboard>;
 };
 
-export function TodayTrang chủ({ data }: TodayTrang chủProps) {
+export function TodayDashboard({ data }: TodayDashboardProps) {
   return (
     <section className="grid gap-4 xl:grid-cols-[1.4fr_1fr_1fr]">
       <div className="rounded-[2rem] border border-gray-200 bg-gray-900 shadow-sm">

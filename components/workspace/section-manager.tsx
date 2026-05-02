@@ -57,7 +57,7 @@ export function SectionManager({ activeSection }: SectionManagerProps) {
 
         {activeSection.is_system ? (
           <div className="rounded-3xl border border-dashed border-gray-400 bg-gray-100/60 p-5 text-sm leading-6 text-gray-700">
-            Phần hệ thống có thể đổi tên, but they are protected from deletion to keep your core workspace stable.
+            Phần hệ thống có thể đổi tên, nhưng được bảo vệ khỏi việc xoá để giữ ổn định không gian làm việc.
           </div>
         ) : (
           <form action={deleteSection} className="rounded-3xl border border-gray-200 bg-gray-50 p-5">
@@ -65,7 +65,7 @@ export function SectionManager({ activeSection }: SectionManagerProps) {
             <input name="slug" type="hidden" value={activeSection.slug} />
             <p className="text-sm font-medium text-gray-900">Xoá current custom section</p>
             <p className="mt-2 text-sm leading-6 text-gray-700">
-              Tài liệu sẽ được chuyển về Ghi chú so you do not lose content.
+              Tài liệu sẽ được chuyển về Ghi chú để bạn không mất nội dung.
             </p>
             <button
               className="mt-4 rounded-2xl border border-red-200 bg-red-50 px-4 py-2 text-sm font-medium text-red-700 transition hover:bg-red-100"

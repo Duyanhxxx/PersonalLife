@@ -1,7 +1,7 @@
-import { TodayTrang chủ } from "@/components/workspace/today-dashboard";
+import { TodayDashboard } from "@/components/workspace/today-dashboard";
 import { requireUser } from "@/lib/auth/session";
-import { getTodayTrang chủ } from "@/lib/workspace/dashboard";
-import { getWorkspacePhần } from "@/lib/workspace/sections";
+import { getTodayDashboard } from "@/lib/workspace/dashboard";
+import { getWorkspaceSections } from "@/lib/workspace/sections";
 import Link from "next/link";
 import { sectionThemes } from "@/lib/workspace/section-theme";
 import type { SystemSectionSlug } from "@/types/workspace";
@@ -9,8 +9,8 @@ import type { SystemSectionSlug } from "@/types/workspace";
 export default async function WorkspaceHomePage() {
   const user = await requireUser();
   const [dashboard, sections] = await Promise.all([
-    getTodayTrang chủ(user.id),
-    getWorkspacePhần(user.id),
+    getTodayDashboard(user.id),
+    getWorkspaceSections(user.id),
   ]);
 
   return (
@@ -32,7 +32,7 @@ export default async function WorkspaceHomePage() {
           </h1>
         </div>
 
-        <TodayTrang chủ data={dashboard} />
+        <TodayDashboard data={dashboard} />
 
         {/* Quick-nav section cards */}
         <div>
