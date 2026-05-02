@@ -2,8 +2,10 @@ import { CreateDocumentButton } from "@/components/sidebar/create-document-butto
 import { sectionThemes } from "@/lib/workspace/section-theme";
 import type { SystemSectionSlug } from "@/types/workspace";
 
+const DATA_SECTIONS = new Set(["calendar", "finance", "tasks", "missions", "reading", "habits"]);
+
 type SectionHeaderProps = {
-  sectionSlug: SystemSectionSlug;
+  sectionSlug: string;
   sectionName: string;
 };
 
@@ -11,7 +13,9 @@ export function SectionHeader({
   sectionSlug,
   sectionName,
 }: SectionHeaderProps) {
-  const theme = sectionThemes[sectionSlug];
+  const theme =
+    sectionThemes[sectionSlug as SystemSectionSlug] ?? sectionThemes.notes;
+  const showDocButtons = !DATA_SECTIONS.has(sectionSlug);
 
   return (
     <section className={`overflow-hidden rounded-[2rem] bg-gradient-to-br ${theme.accent} p-[1px] shadow-[0_30px_120px_rgba(5,56,107,0.18)]`}>
@@ -22,17 +26,19 @@ export function SectionHeader({
               {sectionName}
             </span>
             <h2 className="mt-4 text-4xl font-semibold tracking-tight text-[#05386B] md:text-5xl">
-              Build your {sectionName.toLowerCase()} system.
+              {sectionName}
             </h2>
             <p className="mt-4 max-w-xl text-base leading-7 text-[#20555F]">
-              {theme.description} Use nested pages for structure, lightweight databases for tracking, and archive flows to keep the workspace calm.
+              {theme.description}
             </p>
           </div>
 
-          <div className="flex flex-wrap gap-3">
-            <CreateDocumentButton sectionSlug={sectionSlug} />
-            <CreateDocumentButton kind="database" sectionSlug={sectionSlug} title={`${sectionName} Database`} />
-          </div>
+          {showDocButtons && (
+            <div className="flex flex-wrap gap-3">
+              <CreateDocumentButton sectionSlug={sectionSlug} />
+              <CreateDocumentButton kind="database" sectionSlug={sectionSlug} title={`${sectionName} Database`} />
+            </div>
+          )}
         </div>
       </div>
     </section>

@@ -6,7 +6,9 @@ export function localDateKey(date = new Date()) {
 }
 
 export function todayIso() {
-  return localDateKey(new Date());
+  return new Intl.DateTimeFormat("sv-SE", {
+    timeZone: "Asia/Ho_Chi_Minh",
+  }).format(new Date());
 }
 
 export function monthBounds(month?: string) {

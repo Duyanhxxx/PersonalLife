@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { ChevronRight, Search, Sparkles, Settings } from "lucide-react";
 import { signOut } from "@/actions/auth";
 import { Button } from "@/components/ui/button";
@@ -24,8 +24,8 @@ export function AppSidebar({
   userEmail,
 }: AppSidebarProps) {
   const isCollapsed = useSidebarStore((state) => state.isCollapsed);
-  const searchParams = useSearchParams();
-  const activeSection = searchParams.get("section") ?? sections[0]?.slug;
+  const pathname = usePathname();
+  const activeSection = pathname.split("/")[2] ?? sections[0]?.slug;
   const activeDocuments = documentsBySection[activeSection ?? "notes"] ?? [];
 
   return (

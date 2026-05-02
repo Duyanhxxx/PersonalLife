@@ -59,7 +59,7 @@ export function TodayDashboard({ data }: TodayDashboardProps) {
             <p className="text-sm font-medium text-[#05386B]">Reading queue</p>
             <p className="mt-1 text-2xl font-semibold text-[#05386B]">{data.reading.length}</p>
           </div>
-          <Link className="inline-flex text-sm font-medium text-[#05386B]" href="/app?section=calendar">
+          <Link className="inline-flex text-sm font-medium text-[#05386B]" href="/app/calendar">
             Open full planner
           </Link>
         </div>

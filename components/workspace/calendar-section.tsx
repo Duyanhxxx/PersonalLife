@@ -18,8 +18,8 @@ export function CalendarSection({ data }: CalendarSectionProps) {
           <h3 className="mt-2 text-2xl font-semibold text-[#05386B]">{data.monthLabel}</h3>
         </div>
         <div className="flex gap-2">
-          <Link className="rounded-2xl border border-[#8EE4AF] bg-white/80 px-3 py-2 text-sm text-[#05386B]" href={`/app?section=calendar&month=${addMonth(data.monthKey, -1)}`}>Prev</Link>
-          <Link className="rounded-2xl border border-[#8EE4AF] bg-white/80 px-3 py-2 text-sm text-[#05386B]" href={`/app?section=calendar&month=${addMonth(data.monthKey, 1)}`}>Next</Link>
+          <Link className="rounded-2xl border border-[#8EE4AF] bg-white/80 px-3 py-2 text-sm text-[#05386B]" href={`/app/calendar?month=${addMonth(data.monthKey, -1)}`}>Prev</Link>
+          <Link className="rounded-2xl border border-[#8EE4AF] bg-white/80 px-3 py-2 text-sm text-[#05386B]" href={`/app/calendar?month=${addMonth(data.monthKey, 1)}`}>Next</Link>
         </div>
       </div>
       <MonthGrid
