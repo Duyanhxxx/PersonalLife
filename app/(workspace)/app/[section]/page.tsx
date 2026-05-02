@@ -70,7 +70,7 @@ export default async function SectionPage({ params, searchParams }: SectionPageP
   } else if (sectionSlug === "reading" && readingBooks) {
     content = <ReadingSection books={readingBooks} />;
   } else if (sectionSlug === "habits" && habitsData) {
-    content = <HabitsSection habits={habitsData.habits} todayLogs={habitsData.todayLogs} />;
+    content = <HabitsSection habits={habitsData.habits} todayLogs={habitsData.todayLogs} allLogs={habitsData.allLogs} />;
   } else {
     content = <DocumentPanel document={activeDocument} sectionSlug={sectionSlug} />;
   }
