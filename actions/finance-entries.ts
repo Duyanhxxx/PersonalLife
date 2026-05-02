@@ -30,3 +30,19 @@ export async function deleteFinanceEntry(formData: FormData) {
   await supabase.from("finance_entries").delete().eq("id", value(formData, "id"));
   revalidatePath("/app");
 }
+
+export async function updateFinanceEntry(formData: FormData) {
+  const supabase = await createClient();
+  const id = value(formData, "id");
+  
+  await supabase.from("finance_entries").update({
+    entry_date: value(formData, "entryDate"),
+    title: value(formData, "title"),
+    amount: Number(value(formData, "amount") || 0),
+    entry_type: value(formData, "entryType"),
+    category: value(formData, "category"),
+  }).eq("id", id);
+
+  revalidatePath("/app");
+}
+
