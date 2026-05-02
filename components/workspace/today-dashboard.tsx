@@ -1,6 +1,8 @@
 import { getTodayDashboard } from "@/lib/workspace/dashboard";
 import { useI18n } from "@/lib/i18n/i18n-context";
 import { formatCurrency } from "@/lib/format";
+import type { AwaitedReturn } from "@/types/utils";
+import Link from "next/link";
 
 type TodayDashboardProps = {
   data: AwaitedReturn<typeof getTodayDashboard>;
