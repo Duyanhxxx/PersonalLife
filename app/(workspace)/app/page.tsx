@@ -143,8 +143,6 @@ export default async function WorkspacePage({ searchParams }: WorkspacePageProps
             />
           </div>
         </div>
-
-        </div>
       </div>
     </section>
   );

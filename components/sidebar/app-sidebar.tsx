@@ -75,7 +75,6 @@ export function AppSidebar({
                 <DocumentTree nodes={activeDocuments} sectionSlug={activeSection} />
               ) : null}
             </div>
-            </div>
 
             <div className="px-3 pt-4 border-t border-[#8EE4AF]/20">
               <Link
@@ -83,7 +82,7 @@ export function AppSidebar({
                 href="/app/settings"
               >
                 <Settings className="size-4" />
-                <span>Settings & Studio</span>
+                <span>Settings &amp; Studio</span>
               </Link>
             </div>
           </div>
