@@ -17,7 +17,7 @@ export function WorkspaceShell({
   userEmail,
 }: WorkspaceShellProps) {
   return (
-    <div className="flex min-h-screen bg-[radial-gradient(circle_at_top_left,rgba(92,219,149,0.30),transparent_28%),linear-gradient(180deg,rgba(237,245,225,1),rgba(248,252,246,1))]">
+    <div className="flex min-h-screen bg-white">
       <AppSidebar
         documentsBySection={documentsBySection}
         sections={sections}
@@ -25,14 +25,14 @@ export function WorkspaceShell({
       />
 
       <div className="flex min-h-screen flex-1 flex-col">
-        <header className="sticky top-0 z-20 border-b border-[#8EE4AF]/35 bg-[rgba(237,245,225,0.82)] px-4 py-3 backdrop-blur">
+        <header className="sticky top-0 z-20 border-b border-gray-200 bg-white/95 px-4 py-3 backdrop-blur">
           <div className="flex items-center gap-3">
             <SidebarToggle />
             <div>
-              <p className="text-xs uppercase tracking-[0.14em] text-[#379683]">
-                Workspace
+              <p className="text-xs uppercase tracking-[0.14em] text-gray-500">
+                Không gian làm việc
               </p>
-              <h1 className="text-lg font-semibold text-[#05386B]">PersonalLife</h1>
+              <h1 className="text-lg font-semibold text-gray-900">PersonalLife</h1>
             </div>
           </div>
         </header>

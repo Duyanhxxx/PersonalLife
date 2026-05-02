@@ -12,8 +12,8 @@ type MonthGridProps = {
 };
 
 const toneStyles: Record<string, string> = {
-  blue: "bg-[#05386B] text-[#EDF5E1]",
-  green: "bg-[#8EE4AF]/45 text-[#05386B]",
+  blue: "bg-gray-900 text-white",
+  green: "bg-gray-100 text-gray-900",
   amber: "bg-amber-100 text-amber-800",
   purple: "bg-violet-100 text-violet-700",
   red: "bg-rose-100 text-rose-700",
@@ -43,10 +43,10 @@ export function MonthGrid({ month, items }: MonthGridProps) {
   }, {});
 
   return (
-    <div className="overflow-hidden rounded-[2rem] border border-[#8EE4AF]/45 bg-white/90 shadow-sm">
-      <div className="grid grid-cols-7 border-b border-[#8EE4AF]/35 bg-[#EDF5E1]">
+    <div className="overflow-hidden rounded-[2rem] border border-gray-200 bg-white shadow-sm">
+      <div className="grid grid-cols-7 border-b border-gray-200 bg-gray-100">
         {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
-          <div className="px-3 py-3 text-xs font-semibold uppercase tracking-[0.14em] text-[#379683]" key={day}>
+          <div className="px-3 py-3 text-xs font-semibold uppercase tracking-[0.14em] text-gray-500" key={day}>
             {day}
           </div>
         ))}
@@ -58,8 +58,8 @@ export function MonthGrid({ month, items }: MonthGridProps) {
           const inMonth = iso.startsWith(month);
 
           return (
-            <div className="min-h-32 border-b border-r border-[#8EE4AF]/20 p-3" key={iso}>
-              <p className={`text-sm font-semibold ${inMonth ? "text-[#05386B]" : "text-[#9ABAA8]"}`}>
+            <div className="min-h-32 border-b border-r border-gray-200 p-3" key={iso}>
+              <p className={`text-sm font-semibold ${inMonth ? "text-gray-900" : "text-[#9ABAA8]"}`}>
                 {day.getDate()}
               </p>
               <div className="mt-2 space-y-1.5">
@@ -73,7 +73,7 @@ export function MonthGrid({ month, items }: MonthGridProps) {
                   </div>
                 ))}
                 {dayItems.length > 3 ? (
-                  <p className="text-xs text-[#379683]">+{dayItems.length - 3} more</p>
+                  <p className="text-xs text-gray-500">+{dayItems.length - 3} more</p>
                 ) : null}
               </div>
             </div>

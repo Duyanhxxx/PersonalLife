@@ -26,30 +26,30 @@ export function AppSidebar({
   const isCollapsed = useSidebarStore((state) => state.isCollapsed);
   const pathname = usePathname();
   const activeSection = pathname.split("/")[2] ?? sections[0]?.slug;
-  const activeDocuments = documentsBySection[activeSection ?? "notes"] ?? [];
+  const activeTài liệu = documentsBySection[activeSection ?? "notes"] ?? [];
 
   return (
     <aside
-      className={`hidden border-r border-[#8EE4AF]/40 bg-[linear-gradient(180deg,rgba(237,245,225,0.95),rgba(255,255,255,0.96))] transition-all duration-200 md:flex md:flex-col ${
-        isCollapsed ? "md:w-[88px]" : "md:w-[300px]"
+      className={`hidden border-r border-gray-200 bg-white transition-all duration-200 md:flex md:flex-col ${
+        isCollapsed ? "md:w-[72px]" : "md:w-[280px]"
       }`}
     >
-      <div className="flex items-center gap-3 border-b border-[#8EE4AF]/35 px-4 py-4">
-        <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#05386B] text-sm font-semibold text-[#EDF5E1] shadow-sm">
+      <div className="flex items-center gap-3 border-b border-gray-200 px-4 py-4">
+        <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gray-900 text-sm font-semibold text-white shadow-sm">
           PL
         </div>
         {!isCollapsed && (
           <div className="min-w-0">
-            <p className="truncate text-sm font-semibold text-[#05386B]">PersonalLife</p>
-            <p className="truncate text-xs text-[#379683]">{userEmail}</p>
+            <p className="truncate text-sm font-semibold text-gray-900">PersonalLife</p>
+            <p className="truncate text-xs text-gray-500">{userEmail}</p>
           </div>
         )}
       </div>
 
-      <div className="border-b border-[#8EE4AF]/35 px-4 py-4">
-        <div className="flex items-center gap-2 rounded-2xl border border-[#8EE4AF] bg-white/70 px-3 py-2 text-sm text-[#379683]">
+      <div className="border-b border-gray-200 px-4 py-4">
+        <div className="flex items-center gap-2 rounded-2xl border border-gray-300 bg-white px-3 py-2 text-sm text-gray-500">
           <Search className="size-4" />
-          {!isCollapsed && <span>Search workspace</span>}
+          {!isCollapsed && <span>Tìm kiếm</span>}
         </div>
       </div>
 
@@ -57,32 +57,32 @@ export function AppSidebar({
         {!isCollapsed ? (
           <div className="space-y-6">
             <div>
-              <p className="px-3 pb-2 text-xs font-medium uppercase tracking-[0.16em] text-[#379683]">
-                Sections
+              <p className="px-3 pb-2 text-xs font-medium uppercase tracking-[0.16em] text-gray-500">
+                Phần
               </p>
               <SectionNav sections={sections} />
             </div>
 
             <div className="space-y-3">
               <div className="flex items-center justify-between px-3">
-                <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-[0.16em] text-[#379683]">
+                <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-[0.16em] text-gray-500">
                   <Sparkles className="size-3.5" />
-                  <span>Documents</span>
+                  <span>Tài liệu</span>
                 </div>
                 {activeSection ? <CreateDocumentButton compact sectionSlug={activeSection} /> : null}
               </div>
               {activeSection ? (
-                <DocumentTree nodes={activeDocuments} sectionSlug={activeSection} />
+                <DocumentTree nodes={activeTài liệu} sectionSlug={activeSection} />
               ) : null}
             </div>
 
-            <div className="px-3 pt-4 border-t border-[#8EE4AF]/20">
+            <div className="px-3 pt-4 border-t border-gray-200">
               <Link
-                className="flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm text-[#20555F] transition hover:bg-white/70 hover:text-[#05386B]"
+                className="flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm text-gray-700 transition hover:bg-gray-50 hover:text-gray-900"
                 href="/app/settings"
               >
                 <Settings className="size-4" />
-                <span>Settings &amp; Studio</span>
+                <span>Cài đặt</span>
               </Link>
             </div>
           </div>
@@ -90,7 +90,7 @@ export function AppSidebar({
           <div className="flex flex-col items-center gap-2">
             {sections.map((section) => (
               <Link
-                className="inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-[#8EE4AF] bg-white/70 text-[#379683] transition hover:border-[#379683] hover:text-[#05386B]"
+                className="inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-gray-300 bg-white text-gray-500 transition hover:border-gray-400 hover:text-gray-900"
                 href={`/app?section=${section.slug}`}
                 key={section.id}
               >
@@ -101,10 +101,10 @@ export function AppSidebar({
         )}
       </div>
 
-      <div className="border-t border-[#8EE4AF]/35 p-4">
+      <div className="border-t border-gray-200 p-4">
         <form action={signOut}>
           <Button className="w-full" type="submit" variant="outline">
-            {isCollapsed ? "Exit" : "Sign out"}
+            {isCollapsed ? "Ra" : "Đăng xuất"}
           </Button>
         </form>
       </div>

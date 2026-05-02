@@ -18,17 +18,17 @@ export function SectionHeader({
   const showDocButtons = !DATA_SECTIONS.has(sectionSlug);
 
   return (
-    <section className={`overflow-hidden rounded-[2rem] bg-gradient-to-br ${theme.accent} p-[1px] shadow-[0_30px_120px_rgba(5,56,107,0.18)]`}>
+    <section className={`overflow-hidden rounded-[2rem] bg-gradient-to-br ${theme.accent} p-[1px] shadow-md`}>
       <div className="rounded-[calc(2rem-1px)] bg-[linear-gradient(180deg,rgba(237,245,225,0.98),rgba(255,255,255,0.96))] p-8 md:p-10">
         <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-2xl">
             <span className={`inline-flex rounded-full px-3 py-1 text-sm font-semibold ${theme.pill}`}>
               {sectionName}
             </span>
-            <h2 className="mt-4 text-4xl font-semibold tracking-tight text-[#05386B] md:text-5xl">
+            <h2 className="mt-4 text-4xl font-semibold tracking-tight text-gray-900 md:text-5xl">
               {sectionName}
             </h2>
-            <p className="mt-4 max-w-xl text-base leading-7 text-[#20555F]">
+            <p className="mt-4 max-w-xl text-base leading-7 text-gray-700">
               {theme.description}
             </p>
           </div>

@@ -11,7 +11,7 @@ export function SidebarToggle() {
   return (
     <button
       aria-label="Toggle sidebar"
-      className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-[#8EE4AF] bg-white/75 text-[#379683] transition hover:border-[#379683] hover:text-[#05386B]"
+      className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-gray-300 bg-white text-gray-500 transition hover:border-gray-400 hover:text-gray-900"
       onClick={toggle}
       type="button"
     >

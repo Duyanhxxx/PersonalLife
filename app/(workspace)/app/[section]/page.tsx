@@ -4,7 +4,7 @@ import { DocumentPanel } from "@/components/workspace/document-panel";
 import { FinanceSection } from "@/components/workspace/finance-section";
 import { HabitsSection } from "@/components/workspace/habits-section";
 import { MissionsSection } from "@/components/workspace/missions-section";
-import { ReadingSection } from "@/components/workspace/reading-section";
+import { Đang đọcSection } from "@/components/workspace/reading-section";
 import { SectionHeader } from "@/components/workspace/section-header";
 import { TodoSection } from "@/components/workspace/todo-section";
 import { restoreDocument } from "@/actions/documents";
@@ -13,10 +13,10 @@ import { getFinanceEntries } from "@/lib/workspace/finance";
 import { getHabits } from "@/lib/workspace/habits";
 import { getMissions } from "@/lib/workspace/missions";
 import { getPlannerEvents } from "@/lib/workspace/planner";
-import { getReadingBooks } from "@/lib/workspace/reading";
-import { getSectionDocuments } from "@/lib/workspace/documents";
+import { getĐang đọcBooks } from "@/lib/workspace/reading";
+import { getSectionTài liệu } from "@/lib/workspace/documents";
 import { sectionThemes } from "@/lib/workspace/section-theme";
-import { getWorkspaceSections } from "@/lib/workspace/sections";
+import { getWorkspacePhần } from "@/lib/workspace/sections";
 import { getTodoItems } from "@/lib/workspace/todos";
 import type { SystemSectionSlug } from "@/types/workspace";
 
@@ -32,7 +32,7 @@ export default async function SectionPage({ params, searchParams }: SectionPageP
   const { section: sectionSlug } = await params;
   const { document: documentParam, month } = await searchParams;
 
-  const sections = await getWorkspaceSections(user.id);
+  const sections = await getWorkspacePhần(user.id);
   const activeSection = sections.find((s) => s.slug === sectionSlug);
   if (!activeSection) notFound();
 
@@ -47,9 +47,9 @@ export default async function SectionPage({ params, searchParams }: SectionPageP
       sectionSlug === "finance" ? getFinanceEntries(user.id, month) : null,
       sectionSlug === "tasks" ? getTodoItems(user.id) : null,
       sectionSlug === "missions" ? getMissions(user.id) : null,
-      sectionSlug === "reading" ? getReadingBooks(user.id) : null,
+      sectionSlug === "reading" ? getĐang đọcBooks(user.id) : null,
       sectionSlug === "habits" ? getHabits(user.id) : null,
-      !isDataSection ? getSectionDocuments(user.id, activeSection.id) : null,
+      !isDataSection ? getSectionTài liệu(user.id, activeSection.id) : null,
     ]);
 
   const activeDocument =
@@ -67,9 +67,9 @@ export default async function SectionPage({ params, searchParams }: SectionPageP
   } else if (sectionSlug === "missions" && missionsData) {
     content = <MissionsSection missions={missionsData.missions} todayEntries={missionsData.todayEntries} />;
   } else if (sectionSlug === "reading" && readingBooks) {
-    content = <ReadingSection books={readingBooks} />;
+    content = <Đang đọcSection books={readingBooks} />;
   } else if (sectionSlug === "habits" && habitsData) {
-    content = <HabitsSection habits={habitsData.habits} todayLogs={habitsData.todayLogs} />;
+    content = <HabitsSection habits={habitsData.habits} todayGhi lạis={habitsData.todayGhi lạis} />;
   } else {
     content = <DocumentPanel document={activeDocument} sectionSlug={sectionSlug} />;
   }
@@ -84,30 +84,30 @@ export default async function SectionPage({ params, searchParams }: SectionPageP
         ) : (
           <div className="grid gap-4 lg:grid-cols-[1.7fr_1fr]">
             {content}
-            {/* Archive panel — only for document sections */}
-            <aside className={`rounded-[2rem] border border-[#8EE4AF]/50 ${theme.surface} p-6 shadow-sm`}>
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#379683]">Archive</p>
-              <h3 className="mt-3 text-xl font-semibold text-[#05386B]">Archived pages</h3>
+            {/* Lưu trữ panel — only for document sections */}
+            <aside className={`rounded-[2rem] border border-gray-200 ${theme.surface} p-6 shadow-sm`}>
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gray-500">Lưu trữ</p>
+              <h3 className="mt-3 text-xl font-semibold text-gray-900">Lưu trữd pages</h3>
               <div className="mt-4 space-y-3">
                 {sectionDocs?.archived.length ? (
                   sectionDocs.archived.map((doc) => (
-                    <form action={restoreDocument} className="rounded-3xl border border-white/70 bg-white/75 p-4" key={doc.id}>
+                    <form action={restoreDocument} className="rounded-3xl border border-white/70 bg-white p-4" key={doc.id}>
                       <input name="id" type="hidden" value={doc.id} />
                       <input name="sectionSlug" type="hidden" value={sectionSlug} />
                       <div className="flex items-start justify-between gap-3">
                         <div>
-                          <p className="font-medium text-[#05386B]">{doc.title}</p>
-                          <p className="mt-1 text-xs capitalize text-[#379683]">{doc.kind}</p>
+                          <p className="font-medium text-gray-900">{doc.title}</p>
+                          <p className="mt-1 text-xs capitalize text-gray-500">{doc.kind}</p>
                         </div>
-                        <button className="rounded-2xl bg-[#05386B] px-3 py-2 text-xs font-medium text-[#EDF5E1]" type="submit">
-                          Restore
+                        <button className="rounded-2xl bg-gray-900 px-3 py-2 text-xs font-medium text-white" type="submit">
+                          Khôi phục
                         </button>
                       </div>
                     </form>
                   ))
                 ) : (
-                  <p className="rounded-3xl border border-dashed border-[#379683]/30 bg-white/60 p-4 text-sm text-[#20555F]">
-                    No archived pages yet.
+                  <p className="rounded-3xl border border-dashed border-gray-400 bg-white p-4 text-sm text-gray-700">
+                    Chưa có trang nào lưu trữ.
                   </p>
                 )}
               </div>

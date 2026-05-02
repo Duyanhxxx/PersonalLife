@@ -42,7 +42,7 @@ export function DocumentNode({
     <div className="space-y-1">
       <div
         className={`group flex items-center gap-1 rounded-2xl pr-2 transition ${
-          isActive ? "bg-[#05386B] text-[#EDF5E1]" : "hover:bg-white/70"
+          isActive ? "bg-gray-900 text-white" : "hover:bg-gray-50"
         }`}
       >
         <button
@@ -71,7 +71,7 @@ export function DocumentNode({
       </div>
 
       {canExpand && isOpen ? (
-        <div className="ml-4 border-l border-[#8EE4AF]/40 pl-2">
+        <div className="ml-4 border-l border-gray-200 pl-2">
           {node.children.map((child) => (
             <DocumentNode
               activeDocumentId={activeDocumentId}

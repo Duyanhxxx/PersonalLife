@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "My Notion Clone",
-  description: "A collaborative Notion-style workspace built with Next.js and Supabase.",
+  description: "A collaborative Notion-style workspace built with Tiếp.js and Supabase.",
 };
 
 export default function RootLayout({

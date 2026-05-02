@@ -4,11 +4,11 @@ import { OauthButtons } from "@/components/auth/oauth-buttons";
 import { PasswordInput } from "@/components/auth/password-input";
 import { Button } from "@/components/ui/button";
 
-type LoginFormProps = {
+type Ghi lạiinFormProps = {
   returnTo?: string;
 };
 
-export function LoginForm({ returnTo = "/app" }: LoginFormProps) {
+export function Ghi lạiinForm({ returnTo = "/app" }: Ghi lạiinFormProps) {
   return (
     <div className="space-y-6">
       <OauthButtons returnTo={returnTo} />

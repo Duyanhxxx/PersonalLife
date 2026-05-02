@@ -115,7 +115,13 @@
 - **Missions** section: create missions, log daily progress, progress bars, delete
 - **Reading** section: Trello-style status lanes (To read / Reading / Finished), book cover upload via Supabase Storage
 - **Habits** section: create habits, daily check-off toggle, color-coded, delete — with `habit_logs` table and RLS
-- Auth UX: password visibility icons, signup password confirmation
+- **White/Black Theme**: All green/teal color palette replaced — backgrounds are white, text is black/gray-900, borders are gray-200, active elements use gray-900
+- **Section theme gradients**: All `from-[#05386B]...` replaced with neutral `from-gray-900 via-gray-700 to-gray-400/500` variants
+- **Vietnamese i18n**: All UI text translated to Vietnamese via Python bulk-replacement script; currency changed from `$` to `₫`
+- **Settings: Profile avatar**: Upload to `avatars` Supabase Storage bucket, stored in `profiles.avatar_url`; action in `actions/profile.ts`
+- **Settings: Display name**: Editable `profiles.display_name` field with `updateDisplayName` server action
+- **Settings: Password change**: `changePassword` server action using `supabase.auth.updateUser({ password })`
+- **Settings page fully rebuilt**: Profile section (avatar + name + email), password change, section manager — all in Vietnamese
 - **Settings & Studio page** (`/app/settings`): section CRUD moved off the main workspace
 - **Route-based navigation**: each section is its own `/app/[section]` route; sidebar uses `usePathname()`
 - **Dashboard home** (`/app`): `TodayDashboard` + section quick-nav cards only; no section content mixed in
@@ -136,9 +142,12 @@
 - `SectionNav` uses `usePathname()` — active section = `pathname.split("/")[2]`
 - `AppSidebar` also uses `usePathname()` for the document tree's active section
 - `sectionThemes` keys on `SystemSectionSlug`; falls back to `notes` theme for custom sections
+- `lib/workspace/section-theme.ts` — all themes updated to neutral gray palette with Vietnamese descriptions
 - `todayIso()` uses `Intl.DateTimeFormat("sv-SE", { timeZone: "Asia/Ho_Chi_Minh" })` — not `new Date()` (UTC)
 - SQL planner event seeds use `(now() at time zone 'Asia/Ho_Chi_Minh')::date` for VN-correct seeding
 - `start_time` / `end_time` in `planner_events` are `time without time zone`; seed casts text with `::time`
+- Theme: No custom hex colors remain in active components; all replaced with Tailwind's `gray-*` scale
+- Settings actions live in `actions/profile.ts`: `changePassword`, `changeAvatar`, `updateDisplayName`
 
 ## What Still Needs Work
 - **Rich text editor**: `DocumentPanel` shows a placeholder; TipTap or Novel not yet connected
@@ -149,10 +158,11 @@
 - **Habit streak display**: `habit_logs` table exists but streak computation not yet surfaced in UI
 
 ## Next Steps
-- Apply the SQL migrations in Supabase (including new `20260502000000_habits.sql`)
+- Apply all SQL migrations in Supabase (including `20260502000000_habits.sql` and `20260502000100_profile_avatar.sql`)
 - Set Vercel environment variables: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `NEXT_PUBLIC_SITE_URL`
 - Phase 5: integrate the rich text editor (TipTap/Novel) into the document panel
 - Add edit flows for planner events, finance entries, todo items, missions, reading books, habits
 - Add mobile sidebar drawer (sheet component from shadcn/ui)
 - Implement workspace search with Supabase full-text search
 - Add realtime subscriptions for instant sidebar tree updates
+- Add a language switcher (EN ↔ VI) to settings for future multi-language support

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BookOpen, CalendarDays, CircleDollarSign, FileText, ListTodo, Target, Waves, LayoutDashboard } from "lucide-react";
+import { BookOpen, CalendarDays, CircleDollarSign, FileText, ListTodo, Target, Waves, LayoutTrang chủ } from "lucide-react";
 import type { WorkspaceSection } from "@/lib/workspace/sections";
 
 type SectionNavProps = {
@@ -30,13 +30,13 @@ export function SectionNav({ sections }: SectionNavProps) {
       <Link
         className={`flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm transition ${
           pathname === "/app"
-            ? "bg-[#05386B] text-[#EDF5E1] shadow-sm"
-            : "text-[#20555F] hover:bg-white/70 hover:text-[#05386B]"
+            ? "bg-gray-900 text-white shadow-sm"
+            : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
         }`}
         href="/app"
       >
-        <LayoutDashboard className="size-4" />
-        <span>Dashboard</span>
+        <LayoutTrang chủ className="size-4" />
+        <span>Trang chủ</span>
       </Link>
 
       {sections.map((section) => {
@@ -47,8 +47,8 @@ export function SectionNav({ sections }: SectionNavProps) {
           <Link
             className={`flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm transition ${
               isActive
-                ? "bg-[#05386B] text-[#EDF5E1] shadow-sm"
-                : "text-[#20555F] hover:bg-white/70 hover:text-[#05386B]"
+                ? "bg-gray-900 text-white shadow-sm"
+                : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
             }`}
             href={`/app/${section.slug}`}
             key={section.id}

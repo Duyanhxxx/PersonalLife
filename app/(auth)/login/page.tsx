@@ -1,8 +1,8 @@
 import { AuthMessage } from "@/components/auth/auth-message";
 import { AuthShell } from "@/components/auth/auth-shell";
-import { LoginForm } from "@/components/auth/login-form";
+import { Ghi lạiinForm } from "@/components/auth/login-form";
 
-type LoginPageProps = {
+type Ghi lạiinPageProps = {
   searchParams: Promise<{
     error?: string;
     message?: string;
@@ -10,7 +10,7 @@ type LoginPageProps = {
   }>;
 };
 
-export default async function LoginPage({ searchParams }: LoginPageProps) {
+export default async function Ghi lạiinPage({ searchParams }: Ghi lạiinPageProps) {
   const params = await searchParams;
 
   return (
@@ -21,7 +21,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
     >
       <div className="space-y-6">
         <AuthMessage error={params.error} message={params.message} />
-        <LoginForm returnTo={params.next} />
+        <Ghi lạiinForm returnTo={params.next} />
       </div>
     </AuthShell>
   );

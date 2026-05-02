@@ -17,10 +17,10 @@ export function DocumentTree({ sectionSlug, nodes }: DocumentTreeProps) {
 
   if (!nodes.length) {
     return (
-      <div className="rounded-3xl border border-dashed border-[#379683]/35 bg-white/60 p-4 text-sm text-muted-foreground">
-        <div className="flex items-center gap-2 text-[#05386B]">
+      <div className="rounded-3xl border border-dashed border-gray-400 bg-white p-4 text-sm text-muted-foreground">
+        <div className="flex items-center gap-2 text-gray-900">
           <FilePlus2 className="size-4" />
-          <p className="font-medium">No pages yet in this section.</p>
+          <p className="font-medium">Chưa có trang in this section.</p>
         </div>
         <p className="mt-2 leading-6">
           Start with a lightweight page, then nest databases or child documents under it.
