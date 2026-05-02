@@ -9,14 +9,15 @@ import { formatCurrency } from "@/lib/format";
 import { useI18n } from "@/lib/i18n/i18n-context";
 import Link from "next/link";
 import { useState } from "react";
-import { Trash2, Edit2, Check, X } from "lucide-react";
+import { Trash2, Edit2, Check, X, TrendingUp } from "lucide-react";
 
 type FinanceSectionProps = {
   data: AwaitedReturn<typeof getFinanceEntries>;
+  stats: [string, { income: number; expense: number }][];
 };
 
-export function FinanceSection({ data }: FinanceSectionProps) {
-  const { dictionary } = useI18n();
+export function FinanceSection({ data, stats }: FinanceSectionProps) {
+  const { dictionary, locale } = useI18n();
   const dict = dictionary.finance;
   const [editingId, setEditingId] = useState<string | null>(null);
 
@@ -28,6 +29,8 @@ export function FinanceSection({ data }: FinanceSectionProps) {
     },
     { income: 0, expense: 0 },
   );
+
+  const maxVal = Math.max(...stats.map(([_, s]) => Math.max(s.income, s.expense)), 1);
 
   return (
     <section className="space-y-4">
@@ -41,6 +44,48 @@ export function FinanceSection({ data }: FinanceSectionProps) {
           <Link className="rounded-2xl border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900" href={`/app/finance?month=${addMonth(data.monthKey, 1)}`}>{dict.next}</Link>
         </div>
       </div>
+
+      {/* Finance Chart */}
+      {stats.length > 0 && (
+        <div className="rounded-[2rem] border border-gray-200 bg-white p-6 shadow-sm overflow-hidden">
+          <div className="flex items-center gap-2 mb-6">
+            <TrendingUp className="size-4 text-gray-900" />
+            <p className="text-sm font-semibold text-gray-900">
+              {locale === "vi" ? "Xu hướng 6 tháng" : "6-Month Trend"}
+            </p>
+          </div>
+          <div className="flex items-end justify-between h-48 gap-2 md:gap-4 px-2">
+            {stats.map(([month, s]) => (
+              <div key={month} className="flex-1 flex flex-col items-center gap-2 group">
+                <div className="w-full flex items-end gap-1 h-full max-w-[60px]">
+                  {/* Income bar */}
+                  <div 
+                    className="flex-1 bg-gray-900 rounded-t-lg transition-all duration-500 group-hover:bg-gray-700" 
+                    style={{ height: `${(s.income / maxVal) * 100}%` }}
+                    title={`Income: ${formatCurrency(s.income)}`}
+                  />
+                  {/* Expense bar */}
+                  <div 
+                    className="flex-1 bg-gray-300 rounded-t-lg transition-all duration-500 group-hover:bg-gray-400" 
+                    style={{ height: `${(s.expense / maxVal) * 100}%` }}
+                    title={`Expense: ${formatCurrency(s.expense)}`}
+                  />
+                </div>
+                <p className="text-[10px] font-medium text-gray-500">{month}</p>
+              </div>
+            ))}
+          </div>
+          <div className="mt-4 flex justify-center gap-6 text-[10px] font-semibold uppercase tracking-wider text-gray-400">
+            <div className="flex items-center gap-1.5">
+              <div className="size-2 rounded-full bg-gray-900" /> {dict.income}
+            </div>
+            <div className="flex items-center gap-1.5">
+              <div className="size-2 rounded-full bg-gray-300" /> {dict.expense}
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="grid gap-4 xl:grid-cols-[1.3fr_1fr]">
         <MonthGrid
           items={data.entries.map((entry) => ({

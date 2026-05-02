@@ -17,6 +17,8 @@ export const metadata: Metadata = {
   description: "A collaborative Notion-style workspace built with Tiếp.js and Supabase.",
 };
 
+import { NotificationManager } from "@/components/notification-manager";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -28,8 +30,10 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full bg-background text-foreground flex flex-col">
+        <NotificationManager />
         {children}
       </body>
     </html>
   );
 }
+

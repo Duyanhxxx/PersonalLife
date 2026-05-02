@@ -9,7 +9,7 @@ import { SectionHeader } from "@/components/workspace/section-header";
 import { TodoSection } from "@/components/workspace/todo-section";
 import { restoreDocument } from "@/actions/documents";
 import { requireUser } from "@/lib/auth/session";
-import { getFinanceEntries } from "@/lib/workspace/finance";
+import { getFinanceEntries, getFinanceStats } from "@/lib/workspace/finance";
 import { getHabits } from "@/lib/workspace/habits";
 import { getMissions } from "@/lib/workspace/missions";
 import { getPlannerEvents } from "@/lib/workspace/planner";
@@ -41,7 +41,7 @@ export default async function SectionPage({ params, searchParams }: SectionPageP
   const isDataSection = DATA_SECTIONS.has(sectionSlug);
 
   // Load only what this section needs
-  const [plannerData, financeData, todoItems, missionsData, readingBooks, habitsData, sectionDocs] =
+  const [plannerData, financeData, todoItems, missionsData, readingBooks, habitsData, financeStats, sectionDocs] =
     await Promise.all([
       sectionSlug === "calendar" ? getPlannerEvents(user.id, month) : null,
       sectionSlug === "finance" ? getFinanceEntries(user.id, month) : null,
@@ -49,6 +49,7 @@ export default async function SectionPage({ params, searchParams }: SectionPageP
       sectionSlug === "missions" ? getMissions(user.id) : null,
       sectionSlug === "reading" ? getReadingBooks(user.id) : null,
       sectionSlug === "habits" ? getHabits(user.id) : null,
+      sectionSlug === "finance" ? getFinanceStats(user.id) : null,
       !isDataSection ? getSectionDocuments(user.id, activeSection.id) : null,
     ]);
 
@@ -61,7 +62,7 @@ export default async function SectionPage({ params, searchParams }: SectionPageP
   if (sectionSlug === "calendar" && plannerData) {
     content = <CalendarSection data={plannerData} />;
   } else if (sectionSlug === "finance" && financeData) {
-    content = <FinanceSection data={financeData} />;
+    content = <FinanceSection data={financeData} stats={financeStats || []} />;
   } else if (sectionSlug === "tasks" && todoItems) {
     content = <TodoSection items={todoItems} />;
   } else if (sectionSlug === "missions" && missionsData) {

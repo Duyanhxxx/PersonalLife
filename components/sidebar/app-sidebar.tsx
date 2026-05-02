@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ChevronRight, Sparkles, Settings } from "lucide-react";
-import { SearchCommand } from "@/components/sidebar/search-command";
+import { ChevronRight, Sparkles, Settings, Search } from "lucide-react";
+import { GlobalSearch } from "./global-search";
 import { signOut } from "@/actions/auth";
 import { useI18n } from "@/lib/i18n/i18n-context";
 import { Button } from "@/components/ui/button";
@@ -41,20 +41,33 @@ export function AppSidebar({
         !isMobile && isCollapsed ? "md:w-[72px]" : ""
       }`}
     >
-      <div className="flex items-center gap-3 border-b border-gray-200 px-4 py-4">
-        <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gray-900 text-sm font-semibold text-white shadow-sm">
-          PL
+      <div className="border-b border-gray-100 p-4">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl font-bold tracking-tight text-gray-900">Life OS</h2>
         </div>
+        
         {(!isCollapsed || isMobile) && (
-          <div className="min-w-0">
-            <p className="truncate text-sm font-semibold text-gray-900">PersonalLife</p>
-            <p className="truncate text-xs text-gray-500">{userEmail}</p>
-          </div>
+          <>
+            <GlobalSearch />
+            <button 
+              onClick={() => {
+                const event = new KeyboardEvent('keydown', {
+                  key: 'k',
+                  metaKey: true,
+                  bubbles: true
+                });
+                document.dispatchEvent(event);
+              }}
+              className="flex items-center gap-3 w-full px-4 py-2.5 rounded-2xl border border-gray-200 bg-white text-sm text-gray-400 hover:border-gray-900 hover:text-gray-900 transition-all group"
+            >
+              <Search className="size-4 group-hover:scale-110 transition-transform" />
+              <span className="flex-1 text-left">{dictionary.common.search}</span>
+              <kbd className="hidden md:flex items-center gap-1 text-[10px] font-bold">
+                <span>⌘</span><span>K</span>
+              </kbd>
+            </button>
+          </>
         )}
-      </div>
-
-      <div className="border-b border-gray-200 px-4 py-4">
-        <SearchCommand />
       </div>
 
       <div className="flex-1 overflow-y-auto px-3 py-4">
@@ -93,6 +106,15 @@ export function AppSidebar({
           </div>
         ) : (
           <div className="flex flex-col items-center gap-2">
+            <button 
+               onClick={() => {
+                const event = new KeyboardEvent('keydown', { key: 'k', metaKey: true, bubbles: true });
+                document.dispatchEvent(event);
+              }}
+              className="inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-gray-300 bg-white text-gray-500 transition hover:border-gray-400 hover:text-gray-900"
+            >
+              <Search className="size-4" />
+            </button>
             {sections.map((section) => (
               <Link
                 className="inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-gray-300 bg-white text-gray-500 transition hover:border-gray-400 hover:text-gray-900"

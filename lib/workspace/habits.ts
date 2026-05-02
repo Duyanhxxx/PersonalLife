@@ -17,9 +17,9 @@ export type HabitLog = {
 export async function getHabits(userId: string) {
   const supabase = await createClient();
   const today = todayIso();
-  const thirtyDaysAgo = new Date();
-  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-  const thirtyDaysAgoIso = thirtyDaysAgo.toISOString().split("T")[0];
+  const ninetyDaysAgo = new Date();
+  ninetyDaysAgo.setDate(ninetyDaysAgo.getDate() - 90);
+  const ninetyDaysAgoIso = ninetyDaysAgo.toISOString().split("T")[0];
 
   const [habitsResult, logsResult] = await Promise.all([
     supabase
@@ -31,7 +31,7 @@ export async function getHabits(userId: string) {
       .from("habit_logs")
       .select("id, habit_id, log_date")
       .eq("user_id", userId)
-      .gte("log_date", thirtyDaysAgoIso)
+      .gte("log_date", ninetyDaysAgoIso)
       .order("log_date", { ascending: false }),
   ]);
 
@@ -60,13 +60,15 @@ export async function getHabits(userId: string) {
     return {
       ...habit,
       streak,
-      last30Days: habitLogs
+      last90Days: habitLogs
     };
   });
 
   return {
     habits: habitsWithStreaks,
     todayLogs,
+    allLogs,
   };
 }
+
 
