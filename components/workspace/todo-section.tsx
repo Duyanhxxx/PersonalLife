@@ -16,8 +16,8 @@ const colorMap: Record<string, string> = {
 
 export function TodoSection({ items }: TodoSectionProps) {
   const groups = {
-    đang làm: items.filter((item) => !item.is_hoàn thành),
-    hoàn thành: items.filter((item) => item.is_hoàn thành),
+    "đang làm": items.filter((item) => !item.is_done),
+    "hoàn thành": items.filter((item) => item.is_done),
   };
 
   return (
@@ -58,8 +58,8 @@ export function TodoSection({ items }: TodoSectionProps) {
                     <div className="flex gap-2">
                       <form action={toggleTodoItem}>
                         <input name="id" type="hidden" value={item.id} />
-                        <input name="isXong" type="hidden" value={String(item.is_hoàn thành)} />
-                        <button className="text-xs font-medium text-gray-500" type="submit">{item.is_hoàn thành ? "Hoàn tác" : "Xong"}</button>
+                        <input name="isDone" type="hidden" value={String(item.is_done)} />
+                        <button className="text-xs font-medium text-gray-500" type="submit">{item.is_done ? "Hoàn tác" : "Xong"}</button>
                       </form>
                       <form action={deleteTodoItem}>
                         <input name="id" type="hidden" value={item.id} />
