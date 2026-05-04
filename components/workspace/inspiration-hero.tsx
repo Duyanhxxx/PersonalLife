@@ -3,7 +3,6 @@ import { FocusMode } from "@/components/workspace/focus-mode";
 type InspirationHeroProps = {
   backgroundUrl: string;
   backgroundAttribution: string;
-  backgroundSource?: "unsplash" | "fallback";
   quote: string;
   author: string;
   locale: "en" | "vi";
@@ -13,7 +12,6 @@ type InspirationHeroProps = {
 export function InspirationHero({
   backgroundUrl,
   backgroundAttribution,
-  backgroundSource = "fallback",
   quote,
   author,
   locale,
@@ -64,15 +62,6 @@ export function InspirationHero({
               quote={quote}
               taskTitle={primaryTask}
             />
-            <span className="rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[11px] font-medium text-[#EDF5E1]/85">
-              {backgroundSource === "unsplash"
-                ? locale === "vi"
-                  ? "Nguồn ảnh: Unsplash trực tiếp"
-                  : "Image source: Live Unsplash"
-                : locale === "vi"
-                  ? "Nguồn ảnh: bộ sưu tập dự phòng"
-                  : "Image source: fallback set"}
-            </span>
             <span className="text-xs text-[#EDF5E1]/75">{backgroundAttribution}</span>
           </div>
         </div>

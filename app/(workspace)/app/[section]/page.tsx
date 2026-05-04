@@ -25,7 +25,7 @@ const DATA_SECTIONS = new Set(["calendar", "finance", "tasks", "missions", "read
 
 const SECTION_REALTIME_TABLES: Record<string, string[]> = {
   calendar: ["planner_events"],
-  finance: ["finance_entries"],
+  finance: ["finance_entries", "finance_wallets", "finance_commitments"],
   tasks: ["todo_items"],
   missions: ["missions", "mission_entries"],
   reading: ["reading_books"],

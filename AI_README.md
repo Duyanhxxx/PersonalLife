@@ -23,9 +23,13 @@
     - `parent_id` -> `documents.id` for infinite nesting
     - Stores editor content, page properties schema, page property values, metadata, ordering, and archive state
   - `planner_events`
-    - Daily calendar events with date, optional start/end time (`time without time zone`), tone, and notes
+    - Daily calendar events with date range, optional start/end time (`time without time zone`), tone, context layer (`work`, `personal`, `health`, `study`), and notes
   - `finance_entries`
-    - Daily income/expense records with amount and category
+    - Daily income/expense records with amount, category, and optional `wallet_id`
+  - `finance_wallets`
+    - Budget envelopes / sinking funds for projects, trips, or campaigns with budget targets and date windows
+  - `finance_commitments`
+    - Upcoming scheduled income/expense items used for end-of-month cashflow projection
   - `todo_items`
     - Daily tasks with priority, color, and completion state
   - `missions`
@@ -67,6 +71,9 @@
   - Full schema, RLS, storage, and seed migrations
 
 ## Completed Features (Latest Updates)
+- **Calendar Upgrade**: Calendar now supports context filters, multi-day timeline bars, and week/day time-blocking views in addition to the month grid.
+- **Finance Upgrade**: Finance now includes project wallets, upcoming cashflow commitments, end-of-month projection, and a category mix visualization.
+- **Homepage Cleanup**: The explicit `Image source: Live Unsplash` label was removed from the homepage while keeping the dynamic background system intact.
 - **Focus Mode Stabilization**: Simplified the fullscreen deep-work overlay to avoid the heavier blur/render path that could destabilize some macOS browsers.
 - **Unsplash Runtime Compatibility**: Inspiration backgrounds now support both `UNSPLASH_ACCESS_KEY` and `NEXT_PUBLIC_UNSPLASH_ACCESS_KEY`, and the hero visibly labels whether the current image came from live Unsplash or the fallback set.
 - **Daily Inspiration Homepage**: `/app` now opens with a quote-driven hero and rotating nature background, with optional Unsplash API support via `UNSPLASH_ACCESS_KEY`.
@@ -107,9 +114,9 @@ Based on the latest implementation, here is the streamlined direction:
 
 ## Next Steps
 1. Add optimistic client-side mutations for planner, finance, tasks, and habits so updates feel instant even before the server round-trip completes.
-2. Build a dedicated milestones/goals screen on top of the current `missions` data model.
-3. Add weekly/monthly reflection tables, summaries, and writing prompts.
-4. Extend the Tailwind polish pass into auth screens, settings, and lower-traffic admin flows for total visual consistency.
+2. Add drag-and-drop calendar block editing and resize interactions on week/day views.
+3. Build a dedicated milestones/goals screen on top of the current `missions` data model.
+4. Add weekly/monthly reflection tables, summaries, and writing prompts.
 
 ## Architecture Notes
 - Daily planner/task state is initialized by `lib/workspace/daily.ts` using Vietnam-local date boundaries (`Asia/Ho_Chi_Minh`) rather than one-time SQL seeding alone.
@@ -117,6 +124,8 @@ Based on the latest implementation, here is the streamlined direction:
 - Realtime sync is handled by a thin client layer: `hooks/use-realtime-refresh.ts` and `components/workspace/workspace-realtime-sync.tsx`, keeping section pages server-rendered while still responding to live Supabase changes.
 - Homepage inspiration is served by `lib/workspace/inspiration.ts` and rendered by `components/workspace/inspiration-hero.tsx`, with optional Unsplash API use and a curated fallback background set.
 - Inspiration image source is surfaced directly in the UI so production env issues are easier to spot without opening logs.
+- Calendar UI is now split into `calendar-planner.tsx`, `calendar-time-grid.tsx`, and `calendar-timeline-view.tsx` to keep the weekly/day/timeline logic modular.
+- Finance UI is now split into `finance-visual-dashboard.tsx`, `finance-wallets-panel.tsx`, and `finance-ledger-panel.tsx` so wallets, projections, and ledger editing evolve independently.
 
 ---
 *Last Updated: 2026-05-04*

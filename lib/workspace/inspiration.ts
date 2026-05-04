@@ -63,7 +63,7 @@ async function getUnsplashBackground(dateKey: string) {
 
     return {
       url: `${photo.urls.regular}&dpr=2`,
-      attribution: photo.user?.name ? `Live Unsplash · ${photo.user.name}` : "Live Unsplash",
+      attribution: photo.user?.name ? `Photo by ${photo.user.name}` : "Photo source available",
       description: photo.alt_description ?? "Nature background",
       source: "unsplash" as const,
     };

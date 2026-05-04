@@ -13,7 +13,7 @@ export async function getPlannerEvents(userId: string, month?: string) {
 
   const { data } = await supabase
     .from("planner_events")
-    .select("id, title, entry_date, start_time, end_time, tone, notes")
+    .select("id, title, entry_date, end_date, start_time, end_time, tone, context, notes")
     .eq("user_id", userId)
     .gte("entry_date", bounds.start)
     .lte("entry_date", bounds.end)
@@ -22,6 +22,9 @@ export async function getPlannerEvents(userId: string, month?: string) {
 
   return {
     ...bounds,
-    events: (data ?? []) as PlannerEvent[],
+    events: ((data ?? []) as PlannerEvent[]).map((event) => ({
+      ...event,
+      end_date: event.end_date ?? event.entry_date,
+    })),
   };
 }

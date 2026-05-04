@@ -17,9 +17,11 @@ export async function createPlannerEvent(formData: FormData) {
     user_id: user.id,
     title: value(formData, "title"),
     entry_date: value(formData, "entryDate"),
+    end_date: value(formData, "endDate") || value(formData, "entryDate"),
     start_time: value(formData, "startTime") || null,
     end_time: value(formData, "endTime") || null,
     tone: value(formData, "tone") || "blue",
+    context: value(formData, "context") || "personal",
     notes: value(formData, "notes") || null,
   });
 

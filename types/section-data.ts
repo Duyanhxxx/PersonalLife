@@ -2,9 +2,11 @@ export type PlannerEvent = {
   id: string;
   title: string;
   entry_date: string;
+  end_date: string | null;
   start_time: string | null;
   end_time: string | null;
   tone: string;
+  context: "work" | "personal" | "health" | "study";
   notes: string | null;
 };
 
@@ -14,6 +16,28 @@ export type FinanceEntry = {
   title: string;
   amount: number;
   entry_type: "income" | "expense";
+  category: string;
+  wallet_id: string | null;
+  wallet_name?: string | null;
+};
+
+export type FinanceWallet = {
+  id: string;
+  title: string;
+  description: string | null;
+  budget_amount: number;
+  color: string;
+  start_date: string | null;
+  end_date: string | null;
+};
+
+export type FinanceCommitment = {
+  id: string;
+  wallet_id: string | null;
+  title: string;
+  amount: number;
+  commitment_type: "income" | "expense";
+  due_date: string;
   category: string;
 };
 
