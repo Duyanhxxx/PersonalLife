@@ -2,6 +2,7 @@ import Link from "next/link";
 import { createPlannerEvent, deletePlannerEvent } from "@/actions/planner-events";
 import { addMonth } from "@/lib/date";
 import { MonthGrid } from "@/components/workspace/month-grid";
+import { getPlannerEvents } from "@/lib/workspace/planner";
 import type { AwaitedReturn } from "@/types/utils";
 import { getDictionary, getLanguage } from "@/lib/i18n/get-dictionary";
 
@@ -12,12 +13,14 @@ type CalendarSectionProps = {
 export async function CalendarSection({ data }: CalendarSectionProps) {
   const dictionary = await getDictionary();
   const locale = await getLanguage();
-  const dict = dictionary.calendar;
+  const title = dictionary.sections.calendar;
+  const eventsLabel = dictionary.dashboard.events;
+  const createLabel = locale === "vi" ? "Sự kiện mới" : "New event";
   return (
     <section className="space-y-4">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gray-500">{dict.title}</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gray-500">{title}</p>
           <h3 className="mt-2 text-2xl font-semibold text-gray-900">{data.monthLabel}</h3>
         </div>
         <div className="flex gap-2">
@@ -37,7 +40,7 @@ export async function CalendarSection({ data }: CalendarSectionProps) {
       />
       <div className="grid gap-4 lg:grid-cols-[1.1fr_1fr]">
         <form action={createPlannerEvent} className="rounded-[2rem] border border-gray-200 bg-white p-6 shadow-sm">
-          <p className="text-sm font-semibold text-gray-900">{dict.new}</p>
+          <p className="text-sm font-semibold text-gray-900">{createLabel}</p>
           <div className="mt-4 grid gap-3 md:grid-cols-2">
             <input className="h-11 rounded-2xl border border-gray-300 px-3 text-sm" name="title" placeholder="Tên sự kiện" required />
             <input className="h-11 rounded-2xl border border-gray-300 px-3 text-sm" defaultValue={data.start} name="entryDate" type="date" required />
@@ -55,7 +58,7 @@ export async function CalendarSection({ data }: CalendarSectionProps) {
           <button className="mt-4 rounded-2xl bg-gray-900 px-4 py-2 text-sm font-medium text-white" type="submit">{dictionary.common.save}</button>
         </form>
         <div className="rounded-[2rem] border border-gray-200 bg-white p-6 shadow-sm">
-          <p className="text-sm font-semibold text-gray-900">{dictionary.dashboard.events}</p>
+          <p className="text-sm font-semibold text-gray-900">{eventsLabel}</p>
           <div className="mt-4 space-y-3">
             {data.events.slice(0, 8).map((event) => (
               <form action={deletePlannerEvent} className="flex items-center justify-between rounded-2xl bg-gray-50 px-4 py-3" key={event.id}>
