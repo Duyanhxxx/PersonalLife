@@ -53,6 +53,26 @@ export function FocusMode({
     return () => window.clearInterval(timer);
   }, [open, running]);
 
+  useEffect(() => {
+    if (!open) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        closeFocusMode();
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [open]);
+
   const headline = useMemo(() => {
     if (taskTitle) return taskTitle;
     return locale === "vi" ? "Một việc quan trọng duy nhất" : "One important thing";
@@ -70,23 +90,24 @@ export function FocusMode({
 
       {open ? (
         <div
-          className="fixed inset-0 z-50 flex min-h-screen items-center justify-center bg-[#05386B]/80 p-6"
+          className="fixed inset-0 z-50 overflow-y-auto bg-[#05386B]/88 p-4 md:p-6"
           style={{
-            backgroundImage: `linear-gradient(rgba(5,56,107,0.64), rgba(5,56,107,0.74)), url(${backgroundUrl})`,
+            backgroundImage: `linear-gradient(rgba(5,56,107,0.74), rgba(5,56,107,0.82)), url(${backgroundUrl})`,
             backgroundPosition: "center",
             backgroundSize: "cover",
           }}
         >
+          <div className="flex min-h-[calc(100vh-2rem)] items-center justify-center md:min-h-[calc(100vh-3rem)]">
           <button
             aria-label={locale === "vi" ? "Thoát Focus Mode" : "Exit Focus Mode"}
-            className="absolute right-5 top-5 rounded-full border border-white/25 bg-white/10 p-2 text-white backdrop-blur"
+            className="absolute right-5 top-5 rounded-full border border-white/25 bg-white/12 p-2 text-white"
             onClick={closeFocusMode}
             type="button"
           >
             <X className="size-5" />
           </button>
 
-          <div className="w-full max-w-3xl rounded-[2rem] border border-white/20 bg-white/10 p-8 text-white backdrop-blur-md">
+          <div className="w-full max-w-3xl rounded-[2rem] border border-white/20 bg-[rgba(255,255,255,0.08)] p-6 text-white shadow-2xl md:p-8">
             <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#8EE4AF]">
               {locale === "vi" ? "Chế độ tập trung" : "Focus Mode"}
             </p>
@@ -96,7 +117,7 @@ export function FocusMode({
             </p>
             <p className="mt-2 text-sm font-medium text-[#8EE4AF]">{author}</p>
 
-            <div className="mt-10 rounded-[2rem] border border-white/15 bg-black/10 p-6">
+            <div className="mt-10 rounded-[2rem] border border-white/15 bg-[rgba(0,0,0,0.14)] p-6">
               <p className="text-sm uppercase tracking-[0.16em] text-white/70">
                 {locale === "vi" ? "Pomodoro" : "Pomodoro"}
               </p>
@@ -131,6 +152,7 @@ export function FocusMode({
                 </button>
               </div>
             </div>
+          </div>
           </div>
         </div>
       ) : null}

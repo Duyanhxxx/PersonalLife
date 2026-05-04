@@ -39,6 +39,7 @@ export default async function WorkspaceHomePage() {
         <InspirationHero
           author={inspiration.author}
           backgroundAttribution={inspiration.backgroundAttribution}
+          backgroundSource={inspiration.backgroundSource}
           backgroundUrl={inspiration.backgroundUrl}
           locale={locale}
           primaryTask={dashboard.tasks.find((task) => !task.is_done)?.title ?? null}

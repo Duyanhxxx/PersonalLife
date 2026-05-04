@@ -23,14 +23,15 @@ function hashString(input: string) {
 }
 
 async function getUnsplashBackground(dateKey: string) {
-  const accessKey = process.env.UNSPLASH_ACCESS_KEY;
+  const accessKey =
+    process.env.UNSPLASH_ACCESS_KEY || process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY;
   if (!accessKey) return null;
 
   const url = new URL("https://api.unsplash.com/photos/random");
   url.searchParams.set("query", "nature forest mountain river");
   url.searchParams.set("orientation", "landscape");
   url.searchParams.set("content_filter", "high");
-  url.searchParams.set("count", "1");
+  url.searchParams.set("featured", "true");
 
   try {
     const response = await fetch(url, {
@@ -45,23 +46,48 @@ async function getUnsplashBackground(dateKey: string) {
 
     if (!response.ok) return null;
 
-    const payload = (await response.json()) as Array<{
-      urls?: { regular?: string };
-      alt_description?: string | null;
-      user?: { name?: string | null };
-    }>;
+    const payload = (await response.json()) as
+      | {
+          urls?: { regular?: string };
+          alt_description?: string | null;
+          user?: { name?: string | null };
+        }
+      | Array<{
+          urls?: { regular?: string };
+          alt_description?: string | null;
+          user?: { name?: string | null };
+        }>;
 
-    const photo = payload[0];
+    const photo = Array.isArray(payload) ? payload[0] : payload;
     if (!photo?.urls?.regular) return null;
 
     return {
-      url: photo.urls.regular,
-      attribution: photo.user?.name ? `Photo by ${photo.user.name} on Unsplash` : "Unsplash",
+      url: `${photo.urls.regular}&dpr=2`,
+      attribution: photo.user?.name ? `Live Unsplash · ${photo.user.name}` : "Live Unsplash",
       description: photo.alt_description ?? "Nature background",
+      source: "unsplash" as const,
     };
   } catch {
     return null;
   }
+}
+
+type InspirationBackground = {
+  url: string;
+  attribution: string;
+  description: string;
+  source: "unsplash" | "fallback";
+};
+
+function getFallbackBackground(dateKey: string): InspirationBackground {
+  const fallbackIndex = hashString(dateKey) % fallbackBackgrounds.length;
+
+  return {
+    url: fallbackBackgrounds[fallbackIndex],
+    attribution: "Curated fallback background",
+    description: "Nature background",
+    source: "fallback",
+  };
 }
 
 export async function getDailyInspiration(userId: string) {
@@ -81,15 +107,15 @@ export async function getDailyInspiration(userId: string) {
       author: "Life OS",
     };
 
-  const unsplashImage = await getUnsplashBackground(dateKey);
-  const fallbackIndex = hashString(dateKey) % fallbackBackgrounds.length;
+  const background = (await getUnsplashBackground(dateKey)) ?? getFallbackBackground(dateKey);
 
   return {
     dateKey,
     quote: quote.quote,
     author: quote.author || "Life OS",
-    backgroundUrl: unsplashImage?.url ?? fallbackBackgrounds[fallbackIndex],
-    backgroundAttribution: unsplashImage?.attribution ?? "Curated nature background",
-    backgroundDescription: unsplashImage?.description ?? "Nature background",
+    backgroundUrl: background.url,
+    backgroundAttribution: background.attribution,
+    backgroundDescription: background.description,
+    backgroundSource: background.source,
   };
 }

@@ -67,6 +67,8 @@
   - Full schema, RLS, storage, and seed migrations
 
 ## Completed Features (Latest Updates)
+- **Focus Mode Stabilization**: Simplified the fullscreen deep-work overlay to avoid the heavier blur/render path that could destabilize some macOS browsers.
+- **Unsplash Runtime Compatibility**: Inspiration backgrounds now support both `UNSPLASH_ACCESS_KEY` and `NEXT_PUBLIC_UNSPLASH_ACCESS_KEY`, and the hero visibly labels whether the current image came from live Unsplash or the fallback set.
 - **Daily Inspiration Homepage**: `/app` now opens with a quote-driven hero and rotating nature background, with optional Unsplash API support via `UNSPLASH_ACCESS_KEY`.
 - **Focus / Deep Work Mode**: Added a fullscreen focus experience with a Pomodoro timer, nature background, and a single highlighted task.
 - **Deletion Bug Fix for Seeded Daily Items**: Default planner events and starter tasks are now seeded only once per day, so deleting completed tasks or upcoming events no longer causes them to reappear.
@@ -114,6 +116,7 @@ Based on the latest implementation, here is the streamlined direction:
 - Seeded daily items are now protected by `daily_workspace_bootstraps`, which prevents deleted default tasks/events from being re-created on the same day.
 - Realtime sync is handled by a thin client layer: `hooks/use-realtime-refresh.ts` and `components/workspace/workspace-realtime-sync.tsx`, keeping section pages server-rendered while still responding to live Supabase changes.
 - Homepage inspiration is served by `lib/workspace/inspiration.ts` and rendered by `components/workspace/inspiration-hero.tsx`, with optional Unsplash API use and a curated fallback background set.
+- Inspiration image source is surfaced directly in the UI so production env issues are easier to spot without opening logs.
 
 ---
 *Last Updated: 2026-05-04*
