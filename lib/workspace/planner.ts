@@ -1,10 +1,16 @@
 import { monthBounds } from "@/lib/date";
 import { createClient } from "@/lib/supabase/server";
+import { ensureDailyWorkspaceState } from "@/lib/workspace/daily";
 import type { PlannerEvent } from "@/types/section-data";
 
 export async function getPlannerEvents(userId: string, month?: string) {
   const supabase = await createClient();
   const bounds = monthBounds(month);
+
+  if (!month || month === bounds.monthKey) {
+    await ensureDailyWorkspaceState(userId);
+  }
+
   const { data } = await supabase
     .from("planner_events")
     .select("id, title, entry_date, start_time, end_time, tone, notes")

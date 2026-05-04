@@ -48,6 +48,7 @@
 - **Premium Mobile Experience**: Refined "Sheet" style navigation for mobile devices with localized headers and smooth transitions.
 - **Full i18n Localization**: Every component (Missions, Reading, Calendar, etc.) is now dynamically translated between English and Vietnamese.
 - **Finance Modernization**: Inline editing and clearer deletion (trash icon) for financial records.
+- **Daily Workspace Bootstrap**: Planner and to-do templates now initialize automatically for each new day in Vietnam time, keeping daily views fresh without losing history.
 
 ## Project Evaluation & Missing Features
 Based on the latest implementation, here is the updated direction:
@@ -67,6 +68,7 @@ Based on the latest implementation, here is the updated direction:
 - [x] **Global Search**: Command+K implementation completed.
 - [x] **Event Notifications**: Browser push reminders implemented.
 - [x] **Mobile Navigation**: Premium sidebar drawer implemented.
+- [x] **Daily Reset Behavior**: Day-scoped task and planner views now bootstrap automatically from the app layer.
 - **Offline Mode**: Progressive Web App (PWA) support for low-connectivity environments.
 
 ### 4. Advanced Personal Management
@@ -78,6 +80,9 @@ Based on the latest implementation, here is the updated direction:
 1. **Short-term**: Category Pie Charts and CSV Export for Finance.
 2. **Medium-term**: PWA support and Google Calendar sync.
 3. **Long-term**: AI-powered productivity assistant and E2E encryption for notes.
+
+## Architecture Notes
+- Daily planner/task state is initialized by `lib/workspace/daily.ts` using Vietnam-local date boundaries (`Asia/Ho_Chi_Minh`) rather than one-time SQL seeding alone.
 
 ---
 *Last Updated: 2026-05-02*

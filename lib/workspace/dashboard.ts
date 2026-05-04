@@ -1,9 +1,11 @@
 import { todayIso } from "@/lib/date";
 import { createClient } from "@/lib/supabase/server";
+import { ensureDailyWorkspaceState } from "@/lib/workspace/daily";
 
 export async function getTodayDashboard(userId: string) {
   const supabase = await createClient();
   const today = todayIso();
+  await ensureDailyWorkspaceState(userId, today);
 
   const [eventsResult, tasksResult, financeResult, missionsResult, readingResult] =
     await Promise.all([
