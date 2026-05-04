@@ -45,7 +45,7 @@ export async function getHabits(userId: string) {
     const logDates = new Set(habitLogs.map(l => l.log_date));
     
     let streak = 0;
-    let checkDate = new Date(today);
+    const checkDate = new Date(today);
     
     // If not completed today, check if it was completed yesterday to continue streak
     if (!logDates.has(today)) {
@@ -70,5 +70,4 @@ export async function getHabits(userId: string) {
     allLogs,
   };
 }
-
 

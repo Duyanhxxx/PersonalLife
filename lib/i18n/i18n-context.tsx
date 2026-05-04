@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, ReactNode } from "react";
-import { dictionaries, type Locale, type Dictionary } from "./dictionaries";
+import { type Locale, type Dictionary } from "./dictionaries";
 
 type I18nContextType = {
   locale: Locale;

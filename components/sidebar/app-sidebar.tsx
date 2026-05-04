@@ -43,7 +43,12 @@ export function AppSidebar({
     >
       <div className="border-b border-gray-100 p-4">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-bold tracking-tight text-gray-900">Life OS</h2>
+          <div className="min-w-0">
+            <h2 className="text-xl font-bold tracking-tight text-gray-900">Life OS</h2>
+            {(!isCollapsed || isMobile) && (
+              <p className="truncate text-xs text-gray-500">{userEmail}</p>
+            )}
+          </div>
         </div>
         
         {(!isCollapsed || isMobile) && (

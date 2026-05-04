@@ -38,9 +38,43 @@
     - Habit definitions with title and color
   - `habit_logs`
     - Daily habit completion records; unique constraint on `(habit_id, log_date)`
+  - `daily_workspace_bootstraps`
+    - One-time per-user/per-day bootstrap record so seeded daily planner/task templates are not re-created after manual deletion
+  - `inspiration_quotes`
+    - Global or user-owned quote library for the homepage inspiration hero
 - Security: Row Level Security (RLS) enabled on all tables; storage bucket policies for avatars and book covers.
 
+## Folder Structure Overview
+- `app`
+  - App Router routes, layouts, auth pages, workspace pages, and route handlers only
+- `actions`
+  - Server Actions for auth, documents, sections, planner, finance, habits, missions, and reading CRUD
+- `components/ui`
+  - Shared `shadcn/ui` primitives and low-level reusable interface pieces
+- `components/sidebar`
+  - Sidebar shell, search, mobile drawer, section navigation, and recursive document tree
+- `components/workspace`
+  - Dashboard cards, section views, calendar/finance/todo/mission/reading UIs, and responsive mobile toggles
+- `components/editor`
+  - TipTap editor integration and document editing surfaces
+- `lib`
+  - Supabase clients, i18n, workspace data loaders, daily bootstrap, helpers, and theme utilities
+- `hooks`
+  - Reusable client hooks for stateful UI behaviors
+- `types`
+  - Shared TypeScript domain models for documents and workspace entities
+- `supabase/migrations`
+  - Full schema, RLS, storage, and seed migrations
+
 ## Completed Features (Latest Updates)
+- **Daily Inspiration Homepage**: `/app` now opens with a quote-driven hero and rotating nature background, with optional Unsplash API support via `UNSPLASH_ACCESS_KEY`.
+- **Focus / Deep Work Mode**: Added a fullscreen focus experience with a Pomodoro timer, nature background, and a single highlighted task.
+- **Deletion Bug Fix for Seeded Daily Items**: Default planner events and starter tasks are now seeded only once per day, so deleting completed tasks or upcoming events no longer causes them to reappear.
+- **Realtime Workspace Refresh**: Dashboard and data sections now subscribe to Supabase Postgres changes and auto-refresh when planner, finance, tasks, missions, reading, or habits data changes.
+- **Mobile Task/Mission/Reading UX Pass**: Added dedicated mobile toggles and compact views for `to-do`, `missions`, and `reading` so phone usage is no longer just compressed desktop cards.
+- **Tailwind Design Cleanup Pass**: Core workspace surfaces now use a more consistent premium palette based on `#05386B`, `#379683`, `#5CDB95`, `#8EE4AF`, and `#EDF5E1`.
+- **Lint Stabilization Pass**: Cleaned active lint/type issues in documents, editor, search, habits, and i18n-related files so the project builds safely again.
+- **Responsive Calendar & Finance Views**: Added mobile-friendly month/list toggles so dense grids are easier to use on phones while desktop keeps the richer calendar layout.
 - **Finance Trends Chart**: Visualizes income vs. expense totals over the last 6 months using a premium monochromatic bar chart.
 - **Habit Activity Heatmap**: 90-day activity grid (GitHub-style) to track long-term consistency and patterns.
 - **Global Search (Command+K)**: Real-time, workspace-wide search modal that queries documents, finance, tasks, missions, and habits simultaneously.
@@ -51,38 +85,35 @@
 - **Daily Workspace Bootstrap**: Planner and to-do templates now initialize automatically for each new day in Vietnam time, keeping daily views fresh without losing history.
 
 ## Project Evaluation & Missing Features
-Based on the latest implementation, here is the updated direction:
+Based on the latest implementation, here is the streamlined direction:
 
-### 1. Analytics & Insights (High Priority)
+### 1. Analytics & Insights
 - [x] **Finance Trends**: Monthly bar charts implemented.
 - [x] **Habit Heatmaps**: 90-day grid implemented.
 - **Category Breakdown**: Pie charts for expense categories in the Finance section.
-- **Goal Projection**: Estimated completion dates for Missions based on current velocity.
+- **Milestone Projection**: Estimated completion dates for long-running goals based on current pace.
 
-### 2. Connectivity & Automation
-- **Third-party Integrations**: Sync with Google Calendar.
-- **Automated Finance**: CSV/Excel statement import support.
-- **Webhooks**: Log data from external sources (e.g., Apple Health).
-
-### 3. User Experience (UX) Enhancements
-- [x] **Global Search**: Command+K implementation completed.
-- [x] **Event Notifications**: Browser push reminders implemented.
-- [x] **Mobile Navigation**: Premium sidebar drawer implemented.
-- [x] **Daily Reset Behavior**: Day-scoped task and planner views now bootstrap automatically from the app layer.
-- **Offline Mode**: Progressive Web App (PWA) support for low-connectivity environments.
-
-### 4. Advanced Personal Management
-- **Journaling**: Dedicated "Day Review" template with mood tracking.
-- **AI Integration**: Smart task suggestions and note summarization.
-- **Resource Management**: Web clipper for saving research directly to the Notes section.
+### 2. Core Modules To Expand
+- **Milestones & Goals Management**: Existing `missions` foundation can evolve into a more explicit long-horizon milestones module.
+- **Weekly / Monthly Reflection Log**: Summaries that pull from reading, habits, tasks, and finance, followed by a short reflection entry.
+- **Health & Fitness Expansion**: Habits is the current base, but it can grow into a fuller health and physical tracking module.
 
 ## Future Development Roadmap
-1. **Short-term**: Category Pie Charts and CSV Export for Finance.
-2. **Medium-term**: PWA support and Google Calendar sync.
-3. **Long-term**: AI-powered productivity assistant and E2E encryption for notes.
+1. **Short-term**: Milestones UI refinement, finance category charts, and quote management.
+2. **Medium-term**: Reflection logs, offline/PWA support, and Google Calendar sync.
+3. **Long-term**: AI-powered productivity assistant and deeper health / life analytics.
+
+## Next Steps
+1. Add optimistic client-side mutations for planner, finance, tasks, and habits so updates feel instant even before the server round-trip completes.
+2. Build a dedicated milestones/goals screen on top of the current `missions` data model.
+3. Add weekly/monthly reflection tables, summaries, and writing prompts.
+4. Extend the Tailwind polish pass into auth screens, settings, and lower-traffic admin flows for total visual consistency.
 
 ## Architecture Notes
 - Daily planner/task state is initialized by `lib/workspace/daily.ts` using Vietnam-local date boundaries (`Asia/Ho_Chi_Minh`) rather than one-time SQL seeding alone.
+- Seeded daily items are now protected by `daily_workspace_bootstraps`, which prevents deleted default tasks/events from being re-created on the same day.
+- Realtime sync is handled by a thin client layer: `hooks/use-realtime-refresh.ts` and `components/workspace/workspace-realtime-sync.tsx`, keeping section pages server-rendered while still responding to live Supabase changes.
+- Homepage inspiration is served by `lib/workspace/inspiration.ts` and rendered by `components/workspace/inspiration-hero.tsx`, with optional Unsplash API use and a curated fallback background set.
 
 ---
-*Last Updated: 2026-05-02*
+*Last Updated: 2026-05-04*

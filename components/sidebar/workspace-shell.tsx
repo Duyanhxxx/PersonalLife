@@ -7,7 +7,6 @@ import { AppSidebar } from "@/components/sidebar/app-sidebar";
 import { Dialog } from "@base-ui/react";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
-import { useI18n } from "@/lib/i18n/i18n-context";
 
 type WorkspaceShellProps = {
   children: React.ReactNode;
@@ -23,7 +22,6 @@ export function WorkspaceShell({
   userEmail,
 }: WorkspaceShellProps) {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
-  const { dictionary } = useI18n();
 
   return (
     <div className="flex min-h-screen bg-white">

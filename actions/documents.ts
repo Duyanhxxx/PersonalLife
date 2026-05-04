@@ -1,8 +1,18 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
+import type { JSONContent } from "@tiptap/core";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+
+type SearchDocumentRow = {
+  id: string;
+  title: string;
+  workspace_sections:
+    | { slug: string | null }
+    | Array<{ slug: string | null }>
+    | null;
+};
 
 function getValue(formData: FormData, key: string) {
   const value = formData.get(key);
@@ -70,7 +80,11 @@ export async function createDocument(formData: FormData) {
   redirect(`/app/${sectionSlug}?document=${data?.id ?? ""}`);
 }
 
-export async function updateDocumentContent(id: string, content: any, sectionSlug: string) {
+export async function updateDocumentContent(
+  id: string,
+  content: JSONContent | null,
+  sectionSlug: string,
+) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return;
@@ -132,7 +146,9 @@ export async function restoreDocument(formData: FormData) {
 
 export async function searchDocuments(query: string) {
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
   if (!user || !query.trim()) return [];
 
   const { data } = await supabase
@@ -142,10 +158,12 @@ export async function searchDocuments(query: string) {
     .ilike("title", `%${query}%`)
     .limit(10);
 
-  return (data || []).map(doc => ({
+  return ((data ?? []) as SearchDocumentRow[]).map((doc) => ({
     id: doc.id,
     title: doc.title,
-    sectionSlug: (doc.workspace_sections as any)?.slug || "notes"
+    sectionSlug:
+      (Array.isArray(doc.workspace_sections)
+        ? doc.workspace_sections[0]?.slug
+        : doc.workspace_sections?.slug) || "notes",
   }));
 }
-

@@ -97,6 +97,17 @@ export async function ensureDailyWorkspaceState(userId: string, dateKey = todayI
   const plannerTemplates = plannerTemplatesFor(dayOfWeek);
   const taskTemplates = taskTemplatesFor(dayOfWeek);
 
+  const { data: bootstrap } = await supabase
+    .from("daily_workspace_bootstraps")
+    .select("id")
+    .eq("user_id", userId)
+    .eq("entry_date", dateKey)
+    .maybeSingle();
+
+  if (bootstrap) {
+    return dateKey;
+  }
+
   const [eventsResult, tasksResult] = await Promise.all([
     supabase
       .from("planner_events")
@@ -135,6 +146,11 @@ export async function ensureDailyWorkspaceState(userId: string, dateKey = todayI
       })),
     );
   }
+
+  await supabase.from("daily_workspace_bootstraps").insert({
+    user_id: userId,
+    entry_date: dateKey,
+  });
 
   return dateKey;
 }

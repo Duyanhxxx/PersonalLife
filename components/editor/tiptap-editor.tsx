@@ -1,6 +1,7 @@
 "use client";
 
 import { useEditor, EditorContent } from "@tiptap/react";
+import type { JSONContent } from "@tiptap/core";
 import StarterKit from "@tiptap/starter-kit";
 import Placeholder from "@tiptap/extension-placeholder";
 import Underline from "@tiptap/extension-underline";
@@ -16,20 +17,21 @@ import {
   Quote,
   Undo,
   Redo,
-  Link as LinkIcon
+  Link as LinkIcon,
 } from "lucide-react";
-import { useEffect, useState, useTransition } from "react";
+import { useRef, useState, useTransition } from "react";
 import { updateDocumentContent } from "@/actions/documents";
 
 type TiptapEditorProps = {
   documentId: string;
-  initialContent: any;
+  initialContent: JSONContent | null;
   sectionSlug: string;
 };
 
 export function TiptapEditor({ documentId, initialContent, sectionSlug }: TiptapEditorProps) {
-  const [isPending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
   const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const editor = useEditor({
     extensions: [
@@ -46,21 +48,22 @@ export function TiptapEditor({ documentId, initialContent, sectionSlug }: Tiptap
     onUpdate: ({ editor }) => {
       const json = editor.getJSON();
       setSaveStatus("saving");
-      
-      // Debounce saving to avoid too many requests
-      const timeoutId = setTimeout(() => {
+
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+
+      timeoutRef.current = setTimeout(() => {
         startTransition(async () => {
           try {
             await updateDocumentContent(documentId, json, sectionSlug);
             setSaveStatus("saved");
             setTimeout(() => setSaveStatus("idle"), 2000);
-          } catch (error) {
+          } catch {
             setSaveStatus("error");
           }
         });
       }, 1000);
-
-      return () => clearTimeout(timeoutId);
     },
   });
 

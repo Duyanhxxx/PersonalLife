@@ -22,6 +22,7 @@ export async function createTodoItem(formData: FormData) {
   });
 
   revalidatePath("/app");
+  revalidatePath("/app/tasks");
 }
 
 export async function toggleTodoItem(formData: FormData) {
@@ -31,10 +32,12 @@ export async function toggleTodoItem(formData: FormData) {
 
   await supabase.from("todo_items").update({ is_done: !isDone }).eq("id", id);
   revalidatePath("/app");
+  revalidatePath("/app/tasks");
 }
 
 export async function deleteTodoItem(formData: FormData) {
   const supabase = await createClient();
   await supabase.from("todo_items").delete().eq("id", value(formData, "id"));
   revalidatePath("/app");
+  revalidatePath("/app/tasks");
 }

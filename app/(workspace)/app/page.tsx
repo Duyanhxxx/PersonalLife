@@ -1,6 +1,9 @@
+import { InspirationHero } from "@/components/workspace/inspiration-hero";
 import { TodayDashboard } from "@/components/workspace/today-dashboard";
+import { WorkspaceRealtimeSync } from "@/components/workspace/workspace-realtime-sync";
 import { requireUser } from "@/lib/auth/session";
 import { getTodayDashboard } from "@/lib/workspace/dashboard";
+import { getDailyInspiration } from "@/lib/workspace/inspiration";
 import { getWorkspaceSections } from "@/lib/workspace/sections";
 import Link from "next/link";
 import { sectionThemes } from "@/lib/workspace/section-theme";
@@ -9,8 +12,9 @@ import { getDictionary, getLanguage } from "@/lib/i18n/get-dictionary";
 
 export default async function WorkspaceHomePage() {
   const user = await requireUser();
-  const [dashboard, sections, dict, locale] = await Promise.all([
+  const [dashboard, inspiration, sections, dict, locale] = await Promise.all([
     getTodayDashboard(user.id),
+    getDailyInspiration(user.id),
     getWorkspaceSections(user.id),
     getDictionary(),
     getLanguage(),
@@ -18,7 +22,28 @@ export default async function WorkspaceHomePage() {
 
   return (
     <section className="p-6 md:p-10">
+      <WorkspaceRealtimeSync
+        userId={user.id}
+        tables={[
+          "planner_events",
+          "todo_items",
+          "finance_entries",
+          "missions",
+          "mission_entries",
+          "reading_books",
+          "habits",
+          "habit_logs",
+        ]}
+      />
       <div className="mx-auto max-w-6xl space-y-8">
+        <InspirationHero
+          author={inspiration.author}
+          backgroundAttribution={inspiration.backgroundAttribution}
+          backgroundUrl={inspiration.backgroundUrl}
+          locale={locale}
+          primaryTask={dashboard.tasks.find((task) => !task.is_done)?.title ?? null}
+          quote={inspiration.quote}
+        />
         {/* Header */}
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gray-500">
@@ -68,4 +93,3 @@ export default async function WorkspaceHomePage() {
     </section>
   );
 }
-

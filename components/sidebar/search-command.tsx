@@ -30,10 +30,7 @@ export function SearchCommand() {
   }, []);
 
   useEffect(() => {
-    if (!query.trim()) {
-      setResults([]);
-      return;
-    }
+    if (!query.trim()) return;
 
     const timer = setTimeout(() => {
       startTransition(async () => {
@@ -44,6 +41,8 @@ export function SearchCommand() {
 
     return () => clearTimeout(timer);
   }, [query]);
+
+  const visibleResults = query.trim() ? results : [];
 
   return (
     <>
@@ -83,7 +82,7 @@ export function SearchCommand() {
                 </div>
               )}
               
-              {!isPending && query && results.length === 0 && (
+              {!isPending && query && visibleResults.length === 0 && (
                 <div className="flex items-center justify-center py-8 text-sm text-gray-500">
                   Không tìm thấy kết quả nào cho &quot;{query}&quot;
                 </div>
@@ -96,7 +95,7 @@ export function SearchCommand() {
               )}
 
               <div className="space-y-1">
-                {results.map((result) => (
+                {visibleResults.map((result) => (
                   <Link
                     key={result.id}
                     href={`/app/${result.sectionSlug}?document=${result.id}`}

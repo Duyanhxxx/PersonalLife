@@ -1,3 +1,5 @@
+import type { JSONContent } from "@tiptap/core";
+
 export type MetadataValue =
   | string
   | number
@@ -17,7 +19,7 @@ export type DocumentRow = {
   icon: string | null;
   kind: DocumentKind;
   metadata: Record<string, MetadataValue> | null;
-  content: any | null;
+  content: JSONContent | null;
   position: number;
   is_archived: boolean;
   updated_at: string;

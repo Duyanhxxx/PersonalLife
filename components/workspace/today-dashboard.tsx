@@ -1,4 +1,5 @@
 "use client";
+import { deletePlannerEvent } from "@/actions/planner-events";
 import { getTodayDashboard } from "@/lib/workspace/dashboard";
 import { useI18n } from "@/lib/i18n/i18n-context";
 import { formatCurrency } from "@/lib/format";
@@ -12,6 +13,8 @@ type TodayDashboardProps = {
 export function TodayDashboard({ data }: TodayDashboardProps) {
   const { locale, dictionary } = useI18n();
   const dict = dictionary.dashboard;
+  const pendingTasks = data.tasks.filter((task) => !task.is_done);
+  const completedTasks = data.tasks.filter((task) => task.is_done);
   return (
     <section className="grid gap-4 xl:grid-cols-[1.4fr_1fr_1fr]">
       <div className="rounded-[2rem] border border-gray-200 bg-gray-900 shadow-sm">
@@ -23,10 +26,20 @@ export function TodayDashboard({ data }: TodayDashboardProps) {
           <div className="mt-6 grid gap-3 md:grid-cols-2">
             {data.events.slice(0, 4).map((event) => (
               <div className="rounded-xl bg-white/10 px-4 py-3" key={event.id}>
-                <p className="text-sm font-medium">{event.title}</p>
-                <p className="mt-1 text-xs text-gray-400">
-                  {[event.start_time, event.end_time].filter(Boolean).join(" - ") || (locale === "vi" ? "Bất kỳ giờ nào" : "Any time")}
-                </p>
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <p className="text-sm font-medium">{event.title}</p>
+                    <p className="mt-1 text-xs text-gray-400">
+                      {[event.start_time, event.end_time].filter(Boolean).join(" - ") || (locale === "vi" ? "Bất kỳ giờ nào" : "Any time")}
+                    </p>
+                  </div>
+                  <form action={deletePlannerEvent}>
+                    <input name="id" type="hidden" value={event.id} />
+                    <button className="text-xs font-medium text-white/75 transition hover:text-white" type="submit">
+                      {locale === "vi" ? "Xoá" : "Delete"}
+                    </button>
+                  </form>
+                </div>
               </div>
             ))}
           </div>
@@ -60,7 +73,10 @@ export function TodayDashboard({ data }: TodayDashboardProps) {
         <div className="mt-4 space-y-3">
           <div className="rounded-xl bg-gray-50 px-4 py-3">
             <p className="text-sm font-medium text-gray-900">{dict.tasks}</p>
-            <p className="mt-1 text-2xl font-semibold text-gray-900">{data.tasks.length}</p>
+            <p className="mt-1 text-2xl font-semibold text-gray-900">{pendingTasks.length}</p>
+            <p className="mt-1 text-xs text-gray-500">
+              {completedTasks.length} {locale === "vi" ? "đã xong" : "completed"}
+            </p>
           </div>
           <div className="rounded-xl bg-gray-50 px-4 py-3">
             <p className="text-sm font-medium text-gray-900">{dict.missions}</p>

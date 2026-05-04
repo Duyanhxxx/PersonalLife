@@ -7,6 +7,7 @@ import { MissionsSection } from "@/components/workspace/missions-section";
 import { ReadingSection } from "@/components/workspace/reading-section";
 import { SectionHeader } from "@/components/workspace/section-header";
 import { TodoSection } from "@/components/workspace/todo-section";
+import { WorkspaceRealtimeSync } from "@/components/workspace/workspace-realtime-sync";
 import { restoreDocument } from "@/actions/documents";
 import { requireUser } from "@/lib/auth/session";
 import { getFinanceEntries, getFinanceStats } from "@/lib/workspace/finance";
@@ -21,6 +22,15 @@ import { getTodoItems } from "@/lib/workspace/todos";
 import type { SystemSectionSlug } from "@/types/workspace";
 
 const DATA_SECTIONS = new Set(["calendar", "finance", "tasks", "missions", "reading", "habits"]);
+
+const SECTION_REALTIME_TABLES: Record<string, string[]> = {
+  calendar: ["planner_events"],
+  finance: ["finance_entries"],
+  tasks: ["todo_items"],
+  missions: ["missions", "mission_entries"],
+  reading: ["reading_books"],
+  habits: ["habits", "habit_logs"],
+};
 
 type SectionPageProps = {
   params: Promise<{ section: string }>;
@@ -77,6 +87,11 @@ export default async function SectionPage({ params, searchParams }: SectionPageP
 
   return (
     <section className="p-6 md:p-10">
+      <WorkspaceRealtimeSync
+        enabled={isDataSection}
+        tables={SECTION_REALTIME_TABLES[sectionSlug] ?? []}
+        userId={user.id}
+      />
       <div className="mx-auto max-w-6xl space-y-6">
         <SectionHeader sectionName={activeSection.name} sectionSlug={sectionSlug} />
 

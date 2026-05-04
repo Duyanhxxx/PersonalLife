@@ -6,10 +6,12 @@ import { searchAction } from "@/actions/search";
 import { useRouter } from "next/navigation";
 import { useI18n } from "@/lib/i18n/i18n-context";
 
+type GlobalSearchResult = Awaited<ReturnType<typeof searchAction>>[number];
+
 export function GlobalSearch() {
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState<any[]>([]);
+  const [results, setResults] = useState<GlobalSearchResult[]>([]);
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const { dictionary } = useI18n();
@@ -26,11 +28,7 @@ export function GlobalSearch() {
   }, []);
 
   useEffect(() => {
-    if (query.length < 2) {
-      setResults([]);
-      return;
-    }
-
+    if (query.length < 2) return;
     const timer = setTimeout(() => {
       startTransition(async () => {
         const res = await searchAction(query);
@@ -42,6 +40,8 @@ export function GlobalSearch() {
   }, [query]);
 
   if (!isOpen) return null;
+
+  const visibleResults = query.length >= 2 ? results : [];
 
   return (
     <div className="fixed inset-0 z-[100] flex items-start justify-center bg-black/50 backdrop-blur-sm p-4 pt-[15vh]">
@@ -64,9 +64,9 @@ export function GlobalSearch() {
         </div>
 
         <div className="max-h-[60vh] overflow-y-auto p-2">
-          {results.length > 0 ? (
+          {visibleResults.length > 0 ? (
             <div className="space-y-1">
-              {results.map((result) => (
+              {visibleResults.map((result) => (
                 <button
                   key={result.id}
                   onClick={() => {
@@ -92,12 +92,18 @@ export function GlobalSearch() {
             </div>
           ) : query.length >= 2 ? (
             <div className="py-12 text-center">
-              <p className="text-sm text-gray-500">No results found for "{query}"</p>
+              <p className="text-sm text-gray-500">
+                No results found for &quot;{query}&quot;
+              </p>
             </div>
           ) : (
             <div className="py-12 text-center">
               <Command className="mx-auto size-8 text-gray-200 mb-4" />
-              <p className="text-sm text-gray-500">Search for documents, transactions, tasks and more...</p>
+              <p className="text-sm text-gray-500">
+                {isPending
+                  ? "Searching..."
+                  : "Search for documents, transactions, tasks and more..."}
+              </p>
             </div>
           )}
         </div>

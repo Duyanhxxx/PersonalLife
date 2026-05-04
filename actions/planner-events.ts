@@ -24,10 +24,12 @@ export async function createPlannerEvent(formData: FormData) {
   });
 
   revalidatePath("/app");
+  revalidatePath("/app/calendar");
 }
 
 export async function deletePlannerEvent(formData: FormData) {
   const supabase = await createClient();
   await supabase.from("planner_events").delete().eq("id", value(formData, "id"));
   revalidatePath("/app");
+  revalidatePath("/app/calendar");
 }
